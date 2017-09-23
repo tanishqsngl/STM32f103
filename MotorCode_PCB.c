@@ -35,16 +35,16 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w)
 	{
 		TIM3 -> CCR4 = (buffer*z)/25;//FL
 		TIM3 -> CCR3 = (buffer*z)/25;//FR
-		GPIOB -> BSRR |= GPIO_BSRR_BS10;
-		GPIOB -> BSRR |= GPIO_BSRR_BR11;
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BS11;
 	}
 
 	else if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==3)//360 right
 	{
 		TIM3 -> CCR4 = (buffer*z)/25;//L
 		TIM3 -> CCR3 = (buffer*z)/25;//R
-		GPIOB -> BSRR |= GPIO_BSRR_BR10;
-		GPIOB -> BSRR |= GPIO_BSRR_BS11;
+		GPIOB -> BSRR |= GPIO_BSRR_BS10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 	//2-Axis
 	else if(x<=buffer1 && x>=buffer2 && y>=buffer1)//forward
@@ -186,7 +186,7 @@ void emStop(void)
 		b = TIM2 -> CNT;
 		if(b >= 500)
 		{
-			TIM3 -> CCR2 = 0;//FL
+			TIM3 -> CCR4 = 0;//FL
 			TIM3 -> CCR3 = 0;//FR
 		}
 	}
