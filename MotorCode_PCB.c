@@ -190,7 +190,7 @@ void emStop(void)
 			TIM3 -> CCR3 = 0;//FR
 		}
 	}
-	TIM2 -> CNT = 0;
+     TIM2 -> CNT = 0;
 }
 
 void timerSetup(void)
