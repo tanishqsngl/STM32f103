@@ -2,11 +2,11 @@
 
 int main(void)
 {
-  //For PWM
-  uint32_t a = 0;
-  RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
-  RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
-  RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
+  	//For PWM
+  	uint32_t a = 0;
+  	RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
+  	RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
+  	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
 
   GPIOA -> CRL |= GPIO_CRL_MODE1_0; //setting high speed (and) output
   GPIOA -> CRL |= GPIO_CRL_MODE1_1;
