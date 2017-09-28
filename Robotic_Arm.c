@@ -203,27 +203,6 @@ void DCServoF(uint32_t aDelay)
 
 	Delay(aDelay);
 
-	GPIOA -> BSRR |= GPIO_BSRR_BS0;
-	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-	GPIOA -> BSRR |= GPIO_BSRR_BS2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
-
-	Delay(aDelay);
-
 	GPIOA -> BSRR |= GPIO_BSRR_BR0;
 	GPIOA -> BSRR |= GPIO_BSRR_BR1;
 	GPIOA -> BSRR |= GPIO_BSRR_BS2;
@@ -232,20 +211,13 @@ void DCServoF(uint32_t aDelay)
 	Delay(aDelay);
 
 	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BS2;
-	GPIOC -> BSRR |= GPIO_BSRR_BS15;
+	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+	GPIOA -> BSRR |= GPIO_BSRR_BR2;
+	GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
 	Delay(aDelay);
 
 	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BS15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BS0;
 	GPIOA -> BSRR |= GPIO_BSRR_BR1;
 	GPIOA -> BSRR |= GPIO_BSRR_BR2;
 	GPIOC -> BSRR |= GPIO_BSRR_BS15;
@@ -256,58 +228,30 @@ void DCServoF(uint32_t aDelay)
 void DCServoB(uint32_t aDelay)
 {
 	GPIOA -> BSRR |= GPIO_BSRR_BS0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
+	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+	GPIOA -> BSRR |= GPIO_BSRR_BS2;
 	GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
 	Delay(aDelay);
 
 	GPIOA -> BSRR |= GPIO_BSRR_BS0;
 	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BS15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BS15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
 	GPIOA -> BSRR |= GPIO_BSRR_BS2;
 	GPIOC -> BSRR |= GPIO_BSRR_BS15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BR1;
-	GPIOA -> BSRR |= GPIO_BSRR_BS2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-	GPIOA -> BSRR |= GPIO_BSRR_BS2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
-
-	Delay(aDelay);
-
-	GPIOA -> BSRR |= GPIO_BSRR_BR0;
-	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
 	Delay(aDelay);
 
 	GPIOA -> BSRR |= GPIO_BSRR_BS0;
 	GPIOA -> BSRR |= GPIO_BSRR_BS1;
 	GPIOA -> BSRR |= GPIO_BSRR_BR2;
-	GPIOC -> BSRR |= GPIO_BSRR_BR15;
+	GPIOC -> BSRR |= GPIO_BSRR_BS15;
+
+	Delay(aDelay);
+
+	GPIOA -> BSRR |= GPIO_BSRR_BR0;
+	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+	GPIOA -> BSRR |= GPIO_BSRR_BS2;
+	GPIOC -> BSRR |= GPIO_BSRR_BS15;
 
 	Delay(aDelay);
 }
@@ -321,7 +265,7 @@ void Delay(int time)
 {
 	volatile int i,j;
 
-	time = time*200;
+	time = time*100;
 	for (i=0;i<time;i++)
 		j++;
 }
@@ -353,7 +297,7 @@ int main()
 	uint16_t servoD = 0;
 	uint16_t servoD1 = 0;
 	uint16_t A = 0;
-	uint16_t act=0;
+	//uint16_t act=0;
 
 	while(1)
 	{
@@ -446,7 +390,8 @@ int main()
 					servoD1 = servoD1*10 + servoD;
 				}
 
-				servoD1 = map(servoD1,13,38,1,1000);
+				servoD1 = servoD1-12;
+				servoD1 = servoD1*40;
 
 				if(A=='t')//t
 				{
