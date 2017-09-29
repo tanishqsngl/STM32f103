@@ -297,7 +297,6 @@ int main()
 	uint16_t servoD = 0;
 	uint16_t servoD1 = 0;
 	uint16_t A = 0;
-	//uint16_t act=0;
 
 	while(1)
 	{
@@ -313,12 +312,6 @@ int main()
 
 			if(A=='s' || A=='S')//s or S Swivel Base
 			{
-				for(int i=0;i<4;i++)
-				{
-					emStop();
-					sBase = sBase - 48;
-					sBase1 = sBase1*10 + sBase;
-				}
 				//Main code for swivel base
 				TIM1 -> CR1 |= TIM_CR1_CEN;
 				TIM1 -> CCER |= TIM_CCER_CC3NE;
@@ -610,6 +603,25 @@ int main()
 					GPIOC -> BSRR |= GPIO_BSRR_BR15;
 				}
 			}
+			else if(A=='c')
+			{
+				TIM3 -> CCR4 = 0;//FL
+				TIM3 -> CCR3 = 0;//FR
+				TIM1 -> CCR2 = 0;
+				TIM1 -> CCR3 = 0;
+				GPIOC -> BSRR |= GPIO_BSRR_BR13;
+				GPIOC -> BSRR |= GPIO_BSRR_BR14;
+				GPIOA -> BSRR |= GPIO_BSRR_BR4;
+				GPIOA -> BSRR |= GPIO_BSRR_BR5;
+				TIM3 -> CCR1 = 0;
+				TIM3 -> CCR2 = 0;
+				GPIOA -> BSRR |= GPIO_BSRR_BR11;
+				GPIOA -> BSRR |= GPIO_BSRR_BR12;
+				GPIOA -> BSRR |= GPIO_BSRR_BR0;
+				GPIOA -> BSRR |= GPIO_BSRR_BR1;
+				GPIOA -> BSRR |= GPIO_BSRR_BR2;
+				GPIOC -> BSRR |= GPIO_BSRR_BR15;
+			}
 			sBase = 0;
 			sBase1 = 0;
 			roll = 0;
@@ -617,7 +629,6 @@ int main()
 			servoD = 0;
 			servoD1 = 0;
 		}
-
 		else
 		{
 			TIM3 -> CCR4 = 0;//FL
