@@ -391,7 +391,7 @@ int main()
 				}
 
 				servoD1 = servoD1-12;
-				servoD1 = servoD1*40;
+				servoD1 = servoD1*1;
 
 				if(A=='t')//t
 				{
