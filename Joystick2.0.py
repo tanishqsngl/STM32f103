@@ -141,7 +141,7 @@ while True:
                 value='rQ'+str(valaxis[2])
                 transmit.send(value)
                 print value
-            else:
-                value='rc'
-                transmit.send(value)
-                print value    
+            else
+            	value="rc"
+            	transmit.send(value)
+            	print value     
