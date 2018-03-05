@@ -1,0 +1,47 @@
+#include "stm32f10x.h"
+#include "stm32f10x_rcc.h"
+char c = 'a';
+
+int main(void)
+{
+	//RCC -> APB1ENR |= RCC_APB1ENR_UART4EN;
+	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
+	RCC -> APB2ENR |= RCC_APB2ENR_USART1EN;
+	RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
+
+	GPIOA -> CRL |= GPIO_CRL_MODE1_0; //setting high speed (and) output
+	GPIOA -> CRL |= GPIO_CRL_MODE1_1;
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_0);//push pull
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_1);
+	GPIOA -> CRH |= (GPIO_CRH_MODE9_0);
+	GPIOA -> CRH |= GPIO_CRH_MODE9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF9_0);
+	GPIOA -> CRH |= GPIO_CRH_CNF9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_1);
+	GPIOA -> CRH |= (GPIO_CRH_CNF10_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF10_1);
+	USART1 -> CR1 &= ~(USART_CR1_UE);//DISABLE
+	USART1 -> CR1 &= ~(USART_CR1_M);//8 WORD
+	USART1 -> CR1 &= ~(USART_CR1_WAKE);
+	USART1 -> CR1 |= (USART_CR1_PCE);//ENABLE PARITY
+	USART1 -> CR1 |= (USART_CR1_TE);//TRANSMITTER ENABLE
+	//USART1 -> CR1 |= (USART_CR1_RE);//TRANSMITTER ENABLE
+	USART1 -> BRR |= 0x9A;//9600
+
+	USART1 -> DR = c;
+
+
+	while(1)
+	{
+		USART1 -> CR1 |= USART_CR1_UE;
+		USART1 -> CR1 |= (USART_CR1_RE);
+		USART1 -> DR = c;
+		//if(x==a)
+		//{
+		//	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+		//}
+
+		//GPIOA -> BSRR |= GPIO_BSRR_BS1;
+	}
+}

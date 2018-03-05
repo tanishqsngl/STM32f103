@@ -1,2 +1,0 @@
-# STM32f103
-Codes for STM32f103C8T6

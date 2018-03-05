@@ -1,0 +1,38 @@
+#include "stm32f10x.h"
+
+int main(void)
+{
+	RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
+	RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
+	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
+
+	GPIOA -> CRL |= GPIO_CRL_MODE1_0;
+	GPIOA -> CRL |= GPIO_CRL_MODE1_1;
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_0);
+    GPIOA -> CRL |= GPIO_CRL_CNF1_1;
+    GPIOA -> CRL &= ~(GPIO_CRL_MODE6_0);
+    GPIOA -> CRL &= ~(GPIO_CRL_MODE6_1);
+    GPIOA -> CRL &= ~(GPIO_CRL_CNF6_0);
+    GPIOA -> CRL &= ~(GPIO_CRL_CNF6_1);
+
+    TIM2 -> CR2 |= TIM_CR2_MMS_0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_2;
+    TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_1;
+    TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_0;
+    TIM2 -> CCMR1 |= TIM_CCMR1_OC1PE;
+    TIM2 -> CCER |= TIM_CCER_CC1E;
+    TIM2 -> CCER |= TIM_CCER_CC1P;
+    TIM2 -> ARR = 2047;
+    TIM2 -> PSC = 0;
+    TIM2 -> EGR |= TIM_EGR_UG;
+    AFIO -> MAPR &= ~(AFIO_MAPR_TIM2_REMAP_1);
+    AFIO -> MAPR &= ~(AFIO_MAPR_TIM2_REMAP_0);
+    GPIOA -> ODR = 0x00;
+    TIM2 -> CR1 |= TIM_CR1_CEN;
+
+	while(1)
+	{
+
+	}
+}
