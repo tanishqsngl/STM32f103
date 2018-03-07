@@ -5,8 +5,6 @@ int main(void)
 	RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
 	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
 	RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
-	RCC -> CFGR &= ~(RCC_CFGR_SWS_0);
-	RCC -> CFGR &= ~(RCC_CFGR_SWS_1);
 
 	GPIOA -> CRL |= (GPIO_CRL_MODE0_0);
 	GPIOA -> CRL |= (GPIO_CRL_MODE0_1);
@@ -27,11 +25,11 @@ int main(void)
 	GPIOA -> ODR = 0x00;
 	TIM2 -> CR1 |= TIM_CR1_CEN;
 
-	TIM2 -> CCR1 = 2000;
+	//TIM2 -> CCR1 = 2000;
 
 	while(1)
 	{
-		TIM2 -> CCR1 = 1000;
-		TIM2 -> CCR1 = 18000;
+		TIM2 -> CCR1 = 2000;
+		//TIM2 -> CCR1 = 18000;
 	}
 }

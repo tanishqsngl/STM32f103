@@ -1,4 +1,6 @@
 #include "stm32f10x.h"
+int servo1=1000;
+int servo2=1000;
 
 void stopArm(void)
 {
@@ -20,8 +22,7 @@ void stopArm(void)
 	GPIOB -> BSRR |= GPIO_BSRR_BR5;
 	GPIOB -> BSRR |= GPIO_BSRR_BR6;
 	GPIOB -> BSRR |= GPIO_BSRR_BR7;
-	GPIOB -> BSRR |= GPIO_BSRR_BR8;
-	GPIOB -> BSRR |= GPIO_BSRR_BR9;
+	GPIOB -> BSRR |= GPIO_BSRR_BR15;
 }
 
 void emStop(void)
@@ -31,7 +32,7 @@ void emStop(void)
 	while(!(USART1 -> SR & (1<<5)))
 	{
 		t++;
-		if(t>=8000000)//1 second
+		if(t>=4000000)//1 second
 		{
 			TIM3 -> CCR4 = 2;//FL
 			TIM3 -> CCR3 = 2;//FR
@@ -47,7 +48,7 @@ void emStop1(void)
 	while(!(USART2 -> SR & (1<<5)))
 	{
 		t++;
-		if(t>=8000000)//1 second
+		if(t>=4000000)//1 second
 		{
 			TIM3 -> CCR4 = 2;//FL
 			TIM3 -> CCR3 = 2;//FR
@@ -121,46 +122,175 @@ void timerSetup(void)
 	TIM1 -> BDTR |= TIM_BDTR_MOE;
 	TIM1 -> CCR3 = 0;
 	TIM1 -> CCR2 = 0;
+
+//	TIM4 -> CR1 &= ~(TIM_CR1_ARPE);
+//	TIM4 -> CR1 &= ~(TIM_CR1_UDIS);
+//	TIM4 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+//	TIM4 -> CCMR2 &= ~(TIM_CCMR2_OC3M_1);
+//	TIM4 -> CCMR2 |= (TIM_CCMR2_OC3M_0);
+//	TIM4 -> CCMR2 |= TIM_CCMR2_OC3PE;
+//	TIM4 -> CCMR2 |= TIM_CCMR2_OC4M_2;
+//	TIM4 -> CCMR2 &= ~(TIM_CCMR2_OC4M_1);
+//	TIM4 -> CCMR2 |= TIM_CCMR2_OC4M_0;
+//	TIM4 -> CCMR2 |= TIM_CCMR2_OC4PE;
+//	TIM4 -> CCER &= ~(TIM_CCER_CC3E);
+//	TIM4 -> CCER |= (TIM_CCER_CC3P);
+//	TIM4 -> CCER &= ~(TIM_CCER_CC4E);
+//	TIM4 -> CCER |= (TIM_CCER_CC4P);
+//	TIM4 -> DIER |= TIM_DIER_UIE;
+//	TIM4 -> ARR = 20000;
+//	TIM4 -> PSC = 36;
+//	TIM4 -> EGR |= TIM_EGR_UG;
+//	TIM4 -> CR1 &= ~(TIM_CR1_CEN);
+//	TIM4 -> CCR3 = 0;
+//	TIM4 -> CCR4 = 0;
+}
+
+void GPIOSetup(void)
+{
+	//Wheel Motor
+	TIM3 -> CR1 &= ~(TIM_CR1_ARPE);
+	TIM3 -> CR1 &= ~(TIM_CR1_UDIS);
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+	TIM3 -> CCMR2 &= ~(TIM_CCMR2_OC3M_1);
+	TIM3 -> CCMR2 |= (TIM_CCMR2_OC3M_0);
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC3PE;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_2;
+	TIM3 -> CCMR2 &= ~(TIM_CCMR2_OC4M_1);
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_0;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4PE;
+	TIM3 -> CCER &= ~(TIM_CCER_CC3E);
+	TIM3 -> CCER |= (TIM_CCER_CC3P);
+	TIM3 -> CCER &= ~(TIM_CCER_CC4E);
+	TIM3 -> CCER |= (TIM_CCER_CC4P);
+	TIM3 -> DIER |= TIM_DIER_UIE;
+	TIM3 -> ARR = 32768;
+	TIM3 -> PSC = 0;
+	TIM3 -> EGR |= TIM_EGR_UG;
+	TIM3 -> CR1 &= ~(TIM_CR1_CEN);
+	TIM3 -> CCR3 = 0;
+	TIM3 -> CCR4 = 0;
+
+	//rArm
+	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_2;
+	TIM3 -> CCMR1 &= ~(TIM_CCMR1_OC1M_1);
+	TIM3 -> CCMR1 |= (TIM_CCMR1_OC1M_0);
+	TIM3 -> CCMR1 |= TIM_CCMR1_OC1PE;
+	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_2;
+	TIM3 -> CCMR1 &= ~(TIM_CCMR1_OC2M_1);
+	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+	TIM3 -> CCMR1 |= TIM_CCMR1_OC2PE;
+	TIM3 -> CCER &= ~(TIM_CCER_CC1E);
+	TIM3 -> CCER |= (TIM_CCER_CC1P);
+	TIM3 -> CCER &= ~(TIM_CCER_CC2E);
+	TIM3 -> CCER |= (TIM_CCER_CC2P);
+
+	//Swivel Base Pins
+	//TIM1 -> CR1 |= (TIM_CR1_DIR);
+	TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+	TIM1 -> CCMR2 &= ~(TIM_CCMR2_OC3M_1);
+	TIM1 -> CCMR2 |= (TIM_CCMR2_OC3M_0);
+	TIM1 -> CCMR2 |= TIM_CCMR2_OC3PE;
+	TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
+	TIM1 -> CCMR1 &= ~(TIM_CCMR1_OC2M_1);
+	TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+	TIM1 -> CCMR1 |= TIM_CCMR1_OC2PE;
+	TIM1 -> CCER &= ~(TIM_CCER_CC2E);
+	TIM1 -> CCER |= (TIM_CCER_CC2P);
+	TIM1 -> CCER |= (TIM_CCER_CC2NP);
+	TIM1 -> CCER &= ~(TIM_CCER_CC3E);
+	TIM1 -> CCER |= (TIM_CCER_CC3P);
+	TIM1 -> CCER |= (TIM_CCER_CC3NP);
+	//TIM1 -> CCER |= (TIM_CCER_CC3NE);
+	//TIM1 -> CCER |= (TIM_CCER_CC2NE);
+	TIM1 -> DIER |= TIM_DIER_UIE;
+	TIM1 -> ARR = 32768;
+	TIM1 -> PSC = 0;
+	TIM1 -> EGR |= TIM_EGR_UG;
+	TIM1 -> CR1 &= ~(TIM_CR1_CEN);
+	TIM1 -> BDTR |= TIM_BDTR_MOE;
+	TIM1 -> CCR3 = 0;
+	TIM1 -> CCR2 = 0;
 }
 
 void GPIOSetup(void)
 {
 	//DC Servo Pins
 	GPIOA -> CRL |= (GPIO_CRL_MODE0_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE0_1);
 	GPIOA -> CRL |= GPIO_CRL_MODE1_0;
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE1_1);
 	GPIOA -> CRL |= (GPIO_CRL_MODE2_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE2_1);
 	GPIOC -> CRH |= GPIO_CRH_MODE15_0;
+	GPIOC -> CRH &= ~(GPIO_CRH_MODE15_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF0_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF0_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF2_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF2_1);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF15_0);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF15_1);
 
 	//UART Pins
 	GPIOA -> CRH |= (GPIO_CRH_MODE9_0);
 	GPIOA -> CRH |= GPIO_CRH_MODE9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF9_0);
 	GPIOA -> CRH |= GPIO_CRH_CNF9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_1);
 	GPIOA -> CRH |= (GPIO_CRH_CNF10_0);
-
-	GPIOA -> CRL |= (GPIO_CRL_CNF3_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF10_1);
 
 	//Actuator Pins
 	GPIOC -> CRH |= (GPIO_CRH_MODE13_0);
+	GPIOC -> CRH &= ~(GPIO_CRH_MODE13_1);
 	GPIOC -> CRH |= GPIO_CRH_MODE14_0;
+	GPIOC -> CRH &= ~(GPIO_CRH_MODE14_1);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF13_0);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF13_1);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF14_0);
+	GPIOC -> CRH &= ~(GPIO_CRH_CNF14_1);
 
 	//Pitch Pins
 	GPIOA -> CRL |= (GPIO_CRL_MODE4_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE4_1);
 	GPIOA -> CRL |= GPIO_CRL_MODE5_0;
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE5_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF4_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF4_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF5_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF5_1);
 
 	//Roll Pins
 	GPIOA -> CRL |= (GPIO_CRL_MODE6_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE6_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF6_0);
 	GPIOA -> CRL |= GPIO_CRL_CNF6_1;
 	GPIOA -> CRL |= GPIO_CRL_MODE7_0;
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE7_1);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF7_0);
 	GPIOA -> CRL |= GPIO_CRL_CNF7_1;
 
 	//Gripper Pins
 	GPIOA -> CRH |= (GPIO_CRH_MODE11_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE11_1);
 	GPIOA -> CRH |= GPIO_CRH_MODE12_0;
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE12_1);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF11_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF11_1);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF12_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF12_1);
 
 	//Swivel Base Pins
 	GPIOB -> CRH |= (GPIO_CRH_MODE14_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE14_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF14_0);
 	GPIOB -> CRH |= GPIO_CRH_CNF14_1;
 	GPIOB -> CRH |= GPIO_CRH_MODE15_0;
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE15_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF15_0);
 	GPIOB -> CRH |= GPIO_CRH_CNF15_1;
 
 	//Wheel Motor Pins
@@ -168,20 +298,44 @@ void GPIOSetup(void)
 	GPIOB -> CRL |= GPIO_CRL_MODE0_1;
 	GPIOB -> CRH |= GPIO_CRH_MODE10_0;
 	GPIOB -> CRH |= (GPIO_CRH_MODE10_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF0_0);
 	GPIOB -> CRL |= GPIO_CRL_CNF0_1;
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF10_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF10_1);
 	GPIOB -> CRL |= GPIO_CRL_MODE1_0;
 	GPIOB -> CRL |= (GPIO_CRL_MODE1_1);
 	GPIOB -> CRH |= GPIO_CRH_MODE11_0;
 	GPIOB -> CRH |= (GPIO_CRH_MODE11_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF1_0);
 	GPIOB -> CRL |= GPIO_CRL_CNF1_1;
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF11_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF11_1);
 
 	//Camera A8 B56789
 	GPIOA -> CRH |= (GPIO_CRH_MODE8_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE8_1);
 	GPIOB -> CRL |= GPIO_CRL_MODE5_0;
+	GPIOB -> CRL &= ~(GPIO_CRL_MODE5_1);
 	GPIOB -> CRL |= GPIO_CRL_MODE6_0;
+	GPIOB -> CRL &= ~(GPIO_CRL_MODE6_1);
 	GPIOB -> CRL |= GPIO_CRL_MODE7_0;
+	GPIOB -> CRL &= ~(GPIO_CRL_MODE7_1);
 	GPIOB -> CRH |= GPIO_CRH_MODE8_0;
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE8_1);
 	GPIOB -> CRH |= GPIO_CRH_MODE9_0;
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE9_1);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF8_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF8_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF5_0);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF5_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF6_0);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF6_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF7_0);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF7_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF8_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF8_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF9_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF9_1);
 }
 
 void UARTSetup(void)
@@ -315,14 +469,14 @@ void DCServoB1(uint32_t aDelay)
 
 	Delay(aDelay);
 
-	GPIOB -> BSRR |= GPIO_BSRR_BS8;
+	GPIOA -> BSRR |= GPIO_BSRR_BS8;
 	GPIOB -> BSRR |= GPIO_BSRR_BS5;
 	GPIOB -> BSRR |= GPIO_BSRR_BR6;
 	GPIOB -> BSRR |= GPIO_BSRR_BS7;
 
 	Delay(aDelay);
 
-	GPIOB -> BSRR |= GPIO_BSRR_BR8;
+	GPIOA -> BSRR |= GPIO_BSRR_BR8;
 	GPIOB -> BSRR |= GPIO_BSRR_BS5;
 	GPIOB -> BSRR |= GPIO_BSRR_BS6;
 	GPIOB -> BSRR |= GPIO_BSRR_BS7;
@@ -337,7 +491,7 @@ uint16_t map(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e)
 
 void Delay(int time)
 {
-	volatile int i=0,j=0;
+	volatile int i,j;
 
 	time = time*100;
 	for (i=0;i<time;i++)
@@ -511,13 +665,29 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	}
 	else if(c1=='m'||c1=='M'||c1=='c'||c1=='n'||c1=='N')
 	{
-		if(c1=='c')
-		{
-			GPIOA -> BSRR |= GPIO_BSRR_BR8;
-			GPIOB -> BSRR |= GPIO_BSRR_BR5;
-			GPIOB -> BSRR |= GPIO_BSRR_BR6;
-			GPIOB -> BSRR |= GPIO_BSRR_BR7;
-		}
+//		if(c1=='c')
+//		{
+//			TIM4 -> CCR3 = servo1;
+//			TIM4 -> CCR4 = servo2;
+//		}
+//		if(c1=='m')
+//		{
+//			servo1++;
+//		}
+//		if(c1=='M')
+//		{
+//			servo1--;
+//		}
+//		if(c1=='m')
+//		{
+//			servo2++;
+//		}
+//		if(c1=='M')
+//		{
+//			servo2--;
+//		}
+//		TIM4 -> CCR3 = servo1;
+//		TIM4 -> CCR4 = servo2;
 	}
 }
 
@@ -564,10 +734,6 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	{
 		if(c1=='c')
 		{
-			GPIOA -> BSRR |= GPIO_BSRR_BR8;
-			GPIOB -> BSRR |= GPIO_BSRR_BR5;
-			GPIOB -> BSRR |= GPIO_BSRR_BR6;
-			GPIOB -> BSRR |= GPIO_BSRR_BR7;
 		}
 	}
 }
@@ -591,40 +757,42 @@ void RoboticArm(uint32_t A)
 			sBase = sBase - 48;
 			sBase1 = sBase1*10 + sBase;
 		}
-		//Main code for swivel base
-		TIM1 -> CR1 |= TIM_CR1_CEN;
-		TIM1 -> CCER |= TIM_CCER_CC3NE;
-		TIM1 -> CCER |= TIM_CCER_CC2NE;
 
-		TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_2;
-		TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_1;
-		TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_0;
-		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
-		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_1;
-		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+			//Main code for swivel base
+			TIM1 -> CR1 |= TIM_CR1_CEN;
+			TIM1 -> CCER |= TIM_CCER_CC3NE;
+			TIM1 -> CCER |= TIM_CCER_CC2NE;
 
-		for(int i=0;i<2;i++)
-		{
-			emStop();
-			sBase = USART1-> DR;
-			sBase = sBase - 48;
-			sBase1 = sBase1*10 + sBase;
+			TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+			TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_1;
+			TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_0;
+			TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
+			TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_1;
+			TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+
+			for(int i=0;i<2;i++)
+			{
+				emStop();
+				sBase = USART1-> DR;
+				sBase = sBase - 48;
+				sBase1 = sBase1*10 + sBase;
+			}
+
+			sBase1 = sBase1-12;
+			sBase1 = sBase1*1260;
+
+			if(A=='s')//s forward
+			{
+				TIM1 -> CCR2 = sBase1;
+				GPIOB -> BSRR |= GPIO_BSRR_BR15;
+
+			}
+			else if(A=='S')//S backward
+			{
+				TIM1 -> CCR2 = sBase1;
+				GPIOB -> BSRR |= GPIO_BSRR_BS15;
+			}
 		}
-
-		sBase1 = sBase1-12;
-		sBase1 = sBase1*1260;
-
-		if(A=='s')//s forward
-		{
-			TIM1 -> CCR2 = sBase1;
-			TIM1 -> CCR3 = 0;
-		}
-		else if(A=='S')//S backward
-		{
-			TIM1 -> CCR2 = sBase1;
-			TIM1 -> CCR3 = 32768;
-		}
-	}
 
 	if(A=='t' || A=='T')//DC Servo
 	{
@@ -637,7 +805,6 @@ void RoboticArm(uint32_t A)
 		}
 
 		servoD1 = servoD1-12;
-		//servoD1 = servoD1;
 
 		if(A=='t')//t
 		{
@@ -658,20 +825,20 @@ void RoboticArm(uint32_t A)
 		{
 			emStop();
 			servoD2 = USART1 -> DR;
-			servoD2 = servoD-48;
+			servoD2 = servoD2 - 48;
 			servoD21 = servoD21*10 + servoD2;
 		}
 
 		servoD21 = servoD21-12;
 		//servoD1 = servoD1;
 
-		if(A=='o')//t
+		if(A=='o')//o
 		{
-			//DC Servo forward A0 A1 A2 C15
+			//DC Servo forward A8 B5 B6 B7
 			DCServoF1(servoD21);
 		}
 
-		else if(A=='O')//T
+		else if(A=='O')//O
 		{
 			//DC Servo backward
 			DCServoB1(servoD21);
@@ -707,7 +874,7 @@ void RoboticArm(uint32_t A)
 		}
 	}
 
-	if(A=='q' || A=='Q')//Roll q and Q
+	if(A=='g' || A=='G')//Roll q and Q
 	{
 		TIM3 -> CR1 |= TIM_CR1_CEN;
 		TIM3 -> CCER |= TIM_CCER_CC1E;
@@ -731,26 +898,26 @@ void RoboticArm(uint32_t A)
 		roll1 = roll1 - 12;
 		roll1 = roll1*1260;
 
-		if(A=='q')//q forward
+		if(A=='g')//q forward
 		{
-			TIM3 -> CCR1 = roll1;
-			TIM3 -> CCR2 = 0;
+			TIM3 -> CCR1 = 0;
+			TIM3 -> CCR2 = roll1;
 		}
-		else if(A=='Q')//Q backward
+		else if(A=='G')//G backward
 		{
-			TIM3 -> CCR1 = roll1;
-			TIM3 -> CCR2 = 32768;
+			TIM3 -> CCR1 = 32768;
+			TIM3 -> CCR2 = roll1;
 		}
 	}
 
-	if(A=='g' || A=='G')//Gripper G g
+	if(A=='q' || A=='Q')//Gripper G g
 	{
-		if(A=='g')//forward g
+		if(A=='q')//forward g
 		{
 			GPIOA -> BSRR |= GPIO_BSRR_BS11;
 			GPIOA -> BSRR |= GPIO_BSRR_BR12;
 		}
-		else if(A=='G')//Backward G
+		else if(A=='Q')//Backward G
 		{
 			GPIOA -> BSRR |= GPIO_BSRR_BS11;
 			GPIOA -> BSRR |= GPIO_BSRR_BS12;
@@ -772,6 +939,7 @@ void RoboticArm(uint32_t A)
 	servoD21 = 0;
 }
 
+
 int main()
 {
 	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
@@ -786,6 +954,7 @@ int main()
 	RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
 	RCC -> APB1ENR |= RCC_APB1ENR_TIM3EN;
 	RCC -> APB2ENR |= RCC_APB2ENR_TIM1EN;
+	//RCC -> APB1ENR |= RCC_APB1ENR_TIM4EN;
 
 	timerSetup();
 
@@ -804,16 +973,18 @@ int main()
 		USART1 -> CR1 |= USART_CR1_RE;
 		USART2 -> CR1 |= USART_CR1_RE;
 
-		if (count==0)
+		if(count==0)
 		{
 			emStop();
 			A = USART1 -> DR;
 
-			if(A=='b')
+			if(A=='u')
 				count=1;
 
-			if(A == 'a' || 'A')
+			if(A == 'a'|| A=='A')
 			{
+				stopArm();
+
 				uint32_t x = 0;
 				uint32_t y = 0;
 				uint32_t x1 = 0;
@@ -823,8 +994,6 @@ int main()
 				uint8_t w = 0;
 				uint8_t w1 = 0;
 				uint8_t c1=0;
-
-				stopArm();
 
 				for(int i=0;i<4;i++)
 				{
@@ -882,8 +1051,8 @@ int main()
 				if(A=='a')
 					motorCode(x1, y1, z1, w1, c1);
 
-				if(A=='A')
-					motorCode(x1, y1, z1, w1, c1);
+				else if(A=='A')
+					motorCode1(x1, y1, z1, w1, c1);
 
 				x1=0;
 				y1=0;
@@ -904,16 +1073,18 @@ int main()
 			}
 		}
 
-		if (count==1)
+		if(count==1)
 		{
 			emStop1();
 			B = USART2 -> DR;
 
-			if(B == 'b')
+			if(B=='u')
 				count=0;
 
 			if(B == 'a')
 			{
+				stopArm();
+
 				uint32_t x = 0;
 				uint32_t y = 0;
 				uint32_t x1 = 0;
@@ -923,8 +1094,6 @@ int main()
 				uint8_t w = 0;
 				uint8_t w1 = 0;
 				uint8_t c1=0;
-
-				stopArm();
 
 				for(int i=0;i<4;i++)
 				{
@@ -979,7 +1148,8 @@ int main()
 				if(y1==65536)
 					y1=65535;
 
-				motorCode(x1, y1, z1, w1, c1);
+				if(A=='a')
+					motorCode(x1, y1, z1, w1, c1);
 
 				x1=0;
 				y1=0;

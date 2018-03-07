@@ -751,15 +751,15 @@ int main()
 	while(1)
 	{
 		USART1 -> CR1 |= USART_CR1_RE;
-		USART2 -> CR1 |= USART_CR1_RE;
+//		USART2 -> CR1 |= USART_CR1_RE;
 
-		if (count==0)
-		{
-			emStop();
-			A = USART1 -> DR;
-
-			if(A=='b')
-				count=1;
+//		if (count==0)
+//		{
+//			emStop();
+//			A = USART1 -> DR;
+//
+//			if(A=='b')
+//				count=1;
 
 			if(A == 'a')
 			{
@@ -849,89 +849,89 @@ int main()
 			}
 		}
 
-		if (count==1)
-		{
-			emStop1();
-			B = USART2 -> DR;
-
-			if(B=='b')
-				count=0;
-
-			if(B == 'a')
-			{
-				uint32_t x = 0;
-				uint32_t y = 0;
-				uint32_t x1 = 0;
-				uint32_t y1 = 0;
-				uint8_t z = 0;
-				uint8_t z1 = 0;
-				uint8_t w = 0;
-				uint8_t w1 = 0;
-				uint8_t c1=0;
-
-				stopArm();
-
-				for(int i=0;i<4;i++)
-				{
-					emStop1();
-					x = USART2 -> DR;
-					x = x - 48;
-					x1 = x + x1*10;
-				}
-				//x1 is output
-
-				for(int j=0;j<4;j++)
-				{
-					emStop1();
-					y = USART2 -> DR;
-					y = y - 48;
-					y1 = y + y1*10;
-				}
-				//y1 is output
-
-				for(int k=0;k<2;k++)
-				{
-					emStop1();
-					z = USART2 -> DR;
-					z = z - 48;
-					z1 = z + z1*10;
-				}
-
-				emStop1();
-				w = USART2 -> DR;
-				w = w - 48;
-				w1 = w;
-
-				emStop1();
-				c1 = USART2 -> DR;
-
-				y1 = y1 - 1024;
-				z1 = z1 - 13;
-				x1 = x1 - 1024;
-
-				if(x1==2047)
-					x1=2048;
-
-				if(y1==1)
-					y1=0;
-
-				x1 = x1*32;
-				y1 = y1*32;
-
-				if(x1==65536)
-					x1=65535;
-
-				if(y1==65536)
-					y1=65535;
-
-				motorCode(x1, y1, z1, w1, c1);
-
-				x1=0;
-				y1=0;
-				z1=0;
-				w1=0;
-				c1=0;
-			}
+//		if (count==1)
+//		{
+//			emStop1();
+//			B = USART2 -> DR;
+//
+//			if(B=='b')
+//				count=0;
+//
+//			if(B == 'a')
+//			{
+//				uint32_t x = 0;
+//				uint32_t y = 0;
+//				uint32_t x1 = 0;
+//				uint32_t y1 = 0;
+//				uint8_t z = 0;
+//				uint8_t z1 = 0;
+//				uint8_t w = 0;
+//				uint8_t w1 = 0;
+//				uint8_t c1=0;
+//
+//				stopArm();
+//
+//				for(int i=0;i<4;i++)
+//				{
+//					emStop1();
+//					x = USART2 -> DR;
+//					x = x - 48;
+//					x1 = x + x1*10;
+//				}
+//				//x1 is output
+//
+//				for(int j=0;j<4;j++)
+//				{
+//					emStop1();
+//					y = USART2 -> DR;
+//					y = y - 48;
+//					y1 = y + y1*10;
+//				}
+//				//y1 is output
+//
+//				for(int k=0;k<2;k++)
+//				{
+//					emStop1();
+//					z = USART2 -> DR;
+//					z = z - 48;
+//					z1 = z + z1*10;
+//				}
+//
+//				emStop1();
+//				w = USART2 -> DR;
+//				w = w - 48;
+//				w1 = w;
+//
+//				emStop1();
+//				c1 = USART2 -> DR;
+//
+//				y1 = y1 - 1024;
+//				z1 = z1 - 13;
+//				x1 = x1 - 1024;
+//
+//				if(x1==2047)
+//					x1=2048;
+//
+//				if(y1==1)
+//					y1=0;
+//
+//				x1 = x1*32;
+//				y1 = y1*32;
+//
+//				if(x1==65536)
+//					x1=65535;
+//
+//				if(y1==65536)
+//					y1=65535;
+//
+//				motorCode(x1, y1, z1, w1, c1);
+//
+//				x1=0;
+//				y1=0;
+//				z1=0;
+//				w1=0;
+//				c1=0;
+//			}
 		}
 	}
 }

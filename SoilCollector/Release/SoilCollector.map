@@ -484,10 +484,10 @@ END GROUP
 
 .inits          0x000000000800022c       0x28
                 0x000000000800022c                __data_regions_array_start = .
-                0x000000000800022c        0x4 LONG 0x80010fc LOADADDR (.data)
+                0x000000000800022c        0x4 LONG 0x80010f8 LOADADDR (.data)
                 0x0000000008000230        0x4 LONG 0x20000000 ADDR (.data)
                 0x0000000008000234        0x4 LONG 0x20000020 (ADDR (.data) + SIZEOF (.data))
-                0x0000000008000238        0x4 LONG 0x80010fc LOADADDR (.data_CCMRAM)
+                0x0000000008000238        0x4 LONG 0x80010f8 LOADADDR (.data_CCMRAM)
                 0x000000000800023c        0x4 LONG 0x0 ADDR (.data_CCMRAM)
                 0x0000000008000240        0x4 LONG 0x0 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x0000000008000244                __data_regions_array_end = .
@@ -519,7 +519,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x0000000008000254      0xea8
+.text           0x0000000008000254      0xea4
  *(.text .text.*)
  .text._exit    0x0000000008000254        0x6 ./system/src/newlib/_exit.o
                 0x0000000008000254                _exit
@@ -571,47 +571,47 @@ END GROUP
                 0x0000000008000dd4      0x1b0 ./src/main.o
                 0x0000000008000dd4                RoboticArm
  .text.startup.main
-                0x0000000008000f84      0x178 ./src/main.o
+                0x0000000008000f84      0x174 ./src/main.o
                 0x0000000008000f84                main
  *(.rodata .rodata.* .constdata .constdata.*)
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x00000000080010fc        0x0 linker stubs
+ .glue_7        0x00000000080010f8        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x00000000080010fc        0x0 linker stubs
+ .glue_7t       0x00000000080010f8        0x0 linker stubs
 
-.vfp11_veneer   0x00000000080010fc        0x0
- .vfp11_veneer  0x00000000080010fc        0x0 linker stubs
+.vfp11_veneer   0x00000000080010f8        0x0
+ .vfp11_veneer  0x00000000080010f8        0x0 linker stubs
 
-.v4_bx          0x00000000080010fc        0x0
- .v4_bx         0x00000000080010fc        0x0 linker stubs
+.v4_bx          0x00000000080010f8        0x0
+ .v4_bx         0x00000000080010f8        0x0 linker stubs
 
-.iplt           0x00000000080010fc        0x0
- .iplt          0x00000000080010fc        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.iplt           0x00000000080010f8        0x0
+ .iplt          0x00000000080010f8        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
-.rel.dyn        0x00000000080010fc        0x0
- .rel.iplt      0x00000000080010fc        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.rel.dyn        0x00000000080010f8        0x0
+ .rel.iplt      0x00000000080010f8        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00000000080010fc                . = ALIGN (0x4)
-                0x00000000080010fc                __exidx_start = .
+                0x00000000080010f8                . = ALIGN (0x4)
+                0x00000000080010f8                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x00000000080010fc                __exidx_end = .
-                0x00000000080010fc                . = ALIGN (0x4)
-                0x00000000080010fc                _etext = .
-                0x00000000080010fc                __etext = .
+                0x00000000080010f8                __exidx_end = .
+                0x00000000080010f8                . = ALIGN (0x4)
+                0x00000000080010f8                _etext = .
+                0x00000000080010f8                __etext = .
 
-.data_CCMRAM    0x0000000000000000        0x0 load address 0x00000000080010fc
+.data_CCMRAM    0x0000000000000000        0x0 load address 0x00000000080010f8
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x0000000000000000                . = ALIGN (0x4)
-                0x00000000080010fc                _sidata = LOADADDR (.data)
+                0x00000000080010f8                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x20 load address 0x00000000080010fc
+.data           0x0000000020000000       0x20 load address 0x00000000080010f8
  FILL mask 0xff
                 0x0000000020000000                _sdata = .
                 0x0000000020000000                __data_start__ = .
@@ -632,7 +632,7 @@ END GROUP
                 0x0000000020000020                _edata = .
                 0x0000000020000020                __data_end__ = .
 
-.igot.plt       0x0000000020000020        0x0 load address 0x000000000800111c
+.igot.plt       0x0000000020000020        0x0 load address 0x0000000008001118
  .igot.plt      0x0000000020000020        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .bss_CCMRAM     0x0000000000000000        0x0
@@ -782,7 +782,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x38ff
+.debug_info     0x0000000000000000     0x38d4
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x967 ./system/src/newlib/_exit.o
  .debug_info    0x0000000000000967      0x3d1 ./system/src/newlib/_startup.o
@@ -792,9 +792,9 @@ END GROUP
  .debug_info    0x0000000000001cd6      0xad2 ./system/src/cortexm/exception_handlers.o
  .debug_info    0x00000000000027a8      0x49f ./system/src/cmsis/system_stm32f10x.o
  .debug_info    0x0000000000002c47       0xcd ./system/src/cmsis/vectors_stm32f10x.o
- .debug_info    0x0000000000002d14      0xbeb ./src/main.o
+ .debug_info    0x0000000000002d14      0xbc0 ./src/main.o
 
-.debug_abbrev   0x0000000000000000      0xe98
+.debug_abbrev   0x0000000000000000      0xe72
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x210 ./system/src/newlib/_exit.o
  .debug_abbrev  0x0000000000000210      0x173 ./system/src/newlib/_startup.o
@@ -804,9 +804,9 @@ END GROUP
  .debug_abbrev  0x00000000000007b6      0x1fe ./system/src/cortexm/exception_handlers.o
  .debug_abbrev  0x00000000000009b4      0x18c ./system/src/cmsis/system_stm32f10x.o
  .debug_abbrev  0x0000000000000b40       0x9a ./system/src/cmsis/vectors_stm32f10x.o
- .debug_abbrev  0x0000000000000bda      0x2be ./src/main.o
+ .debug_abbrev  0x0000000000000bda      0x298 ./src/main.o
 
-.debug_line     0x0000000000000000     0x102b
+.debug_line     0x0000000000000000     0x102a
  *(.debug_line)
  .debug_line    0x0000000000000000      0x1ca ./system/src/newlib/_exit.o
  .debug_line    0x00000000000001ca      0x10d ./system/src/newlib/_startup.o
@@ -816,7 +816,7 @@ END GROUP
  .debug_line    0x00000000000006fc      0x1f0 ./system/src/cortexm/exception_handlers.o
  .debug_line    0x00000000000008ec      0x16b ./system/src/cmsis/system_stm32f10x.o
  .debug_line    0x0000000000000a57       0x58 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_line    0x0000000000000aaf      0x57c ./src/main.o
+ .debug_line    0x0000000000000aaf      0x57b ./src/main.o
 
 .debug_frame    0x0000000000000000      0x420
  *(.debug_frame)
@@ -830,7 +830,7 @@ END GROUP
  .debug_frame   0x0000000000000284       0x20 ./system/src/cmsis/vectors_stm32f10x.o
  .debug_frame   0x00000000000002a4      0x17c ./src/main.o
 
-.debug_str      0x0000000000000000      0xcfc
+.debug_str      0x0000000000000000      0xcf1
  *(.debug_str)
  .debug_str     0x0000000000000000      0x582 ./system/src/newlib/_exit.o
                                         0x5f3 (size before relaxing)
@@ -848,8 +848,8 @@ END GROUP
                                         0x32d (size before relaxing)
  .debug_str     0x0000000000000ab5       0x57 ./system/src/cmsis/vectors_stm32f10x.o
                                         0x1dc (size before relaxing)
- .debug_str     0x0000000000000b0c      0x1f0 ./src/main.o
-                                        0x408 (size before relaxing)
+ .debug_str     0x0000000000000b0c      0x1e5 ./src/main.o
+                                        0x3fd (size before relaxing)
 
 .debug_loc      0x0000000000000000      0xd84
  *(.debug_loc)

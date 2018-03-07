@@ -7,12 +7,12 @@ void emStop(void)
 	while(!(USART1 -> SR & (1<<5)))
 	{
 		t++;
-		if(t>=8000000)//1 second
+		if(t>=4000000)//1 second
 		{
-			TIM3 -> CCR2 = 2;//FL
-			TIM3 -> CCR1 = 2;//FR
-			GPIOA -> BSRR |= GPIO_BSRR_BR6;
-			GPIOA -> BSRR |= GPIO_BSRR_BR7;
+			TIM3 -> CCR2 = 1;//FL
+			TIM3 -> CCR1 = 1;//F5
+			GPIOA -> BSRR |= GPIO_BSRR_BR4;
+			GPIOA -> BSRR |= GPIO_BSRR_BR5;
 		}
 	}
 }
@@ -62,20 +62,45 @@ void GPIOSetup(void)
 	//UART Pins
 	GPIOA -> CRH |= (GPIO_CRH_MODE9_0);
 	GPIOA -> CRH |= GPIO_CRH_MODE9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF9_0);
 	GPIOA -> CRH |= GPIO_CRH_CNF9_1;
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_MODE10_1);
 	GPIOA -> CRH |= (GPIO_CRH_CNF10_0);
+	GPIOA -> CRH &= ~(GPIO_CRH_CNF10_1);
 
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE3_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_MODE3_1);
 	GPIOA -> CRL |= (GPIO_CRL_CNF3_0);
+	GPIOA -> CRL &= ~(GPIO_CRL_CNF3_1);
 
-	//Pitch Pins
-	GPIOA -> CRL |= (GPIO_CRL_MODE4_0);
-	GPIOA -> CRL |= GPIO_CRL_MODE5_0;
+	GPIOB -> CRL |= (GPIO_CRL_MODE0_0);
+	GPIOB -> CRL |= GPIO_CRL_MODE0_1;
+	GPIOB -> CRH |= GPIO_CRH_MODE10_0;
+	GPIOB -> CRH |= (GPIO_CRH_MODE10_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF0_0);
+	GPIOB -> CRL |= GPIO_CRL_CNF0_1;
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF10_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF10_1);
+	GPIOB -> CRL |= GPIO_CRL_MODE1_0;
+	GPIOB -> CRL |= (GPIO_CRL_MODE1_1);
+	GPIOB -> CRH |= GPIO_CRH_MODE11_0;
+	GPIOB -> CRH |= (GPIO_CRH_MODE11_1);
+	GPIOB -> CRL &= ~(GPIO_CRL_CNF1_0);
+	GPIOB -> CRL |= GPIO_CRL_CNF1_1;
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF11_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF11_1);
 
-	//Roll Pins
-	GPIOA -> CRL |= (GPIO_CRL_MODE6_0);
-	GPIOA -> CRL |= GPIO_CRL_CNF6_1;
-	GPIOA -> CRL |= GPIO_CRL_MODE7_0;
-	GPIOA -> CRL |= GPIO_CRL_CNF7_1;
+	//Swivel Base Pins
+	GPIOB -> CRH |= (GPIO_CRH_MODE14_0);
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE14_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF14_0);
+	GPIOB -> CRH |= GPIO_CRH_CNF14_1;
+	GPIOB -> CRH |= GPIO_CRH_MODE15_0;
+	GPIOB -> CRH &= ~(GPIO_CRH_MODE15_1);
+	GPIOB -> CRH &= ~(GPIO_CRH_CNF15_0);
+	GPIOB -> CRH |= GPIO_CRH_CNF15_1;
+
 }
 
 void UARTSetup(void)
@@ -106,15 +131,15 @@ void Delay(int time)
 void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 {
 	TIM3 -> CR1 |= TIM_CR1_CEN;
-	TIM3 -> CCER |= TIM_CCER_CC1E;
-	TIM3 -> CCER |= TIM_CCER_CC2E;
+	TIM3 -> CCER |= TIM_CCER_CC3E;
+	TIM3 -> CCER |= TIM_CCER_CC4E;
 
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_2;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_1;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_0;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_2;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_1;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_1;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_0;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_2;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_1;
+	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_0;
 
 	uint16_t max = 65535;
 	uint16_t buffer = 32768;
@@ -123,55 +148,55 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 
 	if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==2)//centre
 	{
-		TIM3 -> CCR2 = 0;//FL
-		TIM3 -> CCR1 = 0;//FR
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = 0;//FL
+		TIM3 -> CCR3 = 0;//FR
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 
 	else if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==1)//360 left
 	{
-		TIM3 -> CCR2 = (buffer*z)/25;//FL
-		TIM3 -> CCR1 = (buffer*z)/25;//FR
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BS7;
+		TIM3 -> CCR4 = (buffer*z)/25;//FL
+		TIM3 -> CCR3 = (buffer*z)/25;//FR
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BS11;
 	}
 
 	else if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==3)//360 right
 	{
-		TIM3 -> CCR2 = (buffer*z)/25;//L
-		TIM3 -> CCR1 = (buffer*z)/25;//R
-		GPIOA -> BSRR |= GPIO_BSRR_BS6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = (buffer*z)/25;//L
+		TIM3 -> CCR3 = (buffer*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BS10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 	//2-Axis
 	else if(x<=buffer1 && x>=buffer2 && y>=buffer1)//forward
 	{
-		TIM3 -> CCR2 = ((y-buffer)*z)/25;//L
-		TIM3 -> CCR1 = ((y-buffer)*z)/25;//R
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = ((y-buffer)*z)/25;//L
+		TIM3 -> CCR3 = ((y-buffer)*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 	else if(x<=buffer1 && x>=buffer2 && y<=buffer2)//backward
 	{
-		TIM3 -> CCR2 = ((buffer-y)*z)/25;//L
-		TIM3 -> CCR1 = ((buffer-y)*z)/25;//R
-		GPIOA -> BSRR |= GPIO_BSRR_BS6;
-		GPIOA -> BSRR |= GPIO_BSRR_BS7;
+		TIM3 -> CCR4 = ((buffer-y)*z)/25;//L
+		TIM3 -> CCR3 = ((buffer-y)*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BS10;
+		GPIOB -> BSRR |= GPIO_BSRR_BS11;
 	}
 	else if(y>buffer2 && y<buffer1 && x<buffer2)//Left
 	{
-		TIM3 -> CCR2 = 0;//FL
-		TIM3 -> CCR1 = ((buffer-x)*z)/25;//FR
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = 0;//FL
+		TIM3 -> CCR3 = ((buffer-x)*z)/25;//FR
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 	else if(y>buffer2 && y<buffer1 && x>buffer1)//Right
 	{
-		TIM3 -> CCR2 = ((x-buffer)*z)/25;//FL
-		TIM3 -> CCR1 = 0;//FR
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = ((x-buffer)*z)/25;//FL
+		TIM3 -> CCR3 = 0;//FR
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 
 	if(x>buffer1 && y>=buffer1)//Upper-Right
@@ -181,10 +206,10 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			x = map(x,buffer1,max,buffer1,buffer+0.5*buffer);
 			x=y-x;
 			//x=x-buffer;
-			TIM3 -> CCR2 = ((y-buffer)*z)/25;//L
-			TIM3 -> CCR1 = (x*z)/25;//R
-			GPIOA -> BSRR |= GPIO_BSRR_BR6;
-			GPIOA -> BSRR |= GPIO_BSRR_BR7;
+			TIM3 -> CCR4 = ((y-buffer)*z)/25;//L
+			TIM3 -> CCR3 = (x*z)/25;//R
+			GPIOB -> BSRR |= GPIO_BSRR_BR10;
+			GPIOB -> BSRR |= GPIO_BSRR_BR11;
 
 		}
 		else//Up of Right
@@ -194,10 +219,10 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			if ((x-y)>=0)
 			{
 				y=x-y;
-				TIM3 -> CCR2 = ((x-buffer)*z)/25;//L
-				TIM3 -> CCR1 = (y*z)/25;//R
-				GPIOA -> BSRR |= GPIO_BSRR_BR6;
-				GPIOA -> BSRR |= GPIO_BSRR_BR7;
+				TIM3 -> CCR4 = ((x-buffer)*z)/25;//L
+				TIM3 -> CCR3 = (y*z)/25;//R
+				GPIOB -> BSRR |= GPIO_BSRR_BR10;
+				GPIOB -> BSRR |= GPIO_BSRR_BR11;
 			}
 		}
 	}
@@ -208,10 +233,10 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 		{
 			x = map(x,max,buffer1,buffer+0.5*buffer,buffer1);
 			x=y-x;
-			TIM3 -> CCR2 = (x*z)/25;//L
-			TIM3 -> CCR1 = ((y-buffer)*z)/25;//R
-			GPIOA -> BSRR |= GPIO_BSRR_BR6;
-			GPIOA -> BSRR |= GPIO_BSRR_BR7;
+			TIM3 -> CCR4 = (x*z)/25;//L
+			TIM3 -> CCR3 = ((y-buffer)*z)/25;//R
+			GPIOB -> BSRR |= GPIO_BSRR_BR10;
+			GPIOB -> BSRR |= GPIO_BSRR_BR11;
 		}
 		else
 		{
@@ -221,10 +246,10 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			if ((x-y)>=0)
 			{
 				y=x-y;
-				TIM3 -> CCR2 = (y*z)/25;//L
-				TIM3 -> CCR1 = ((x-buffer)*z)/25;//R
-				GPIOA -> BSRR |= GPIO_BSRR_BR6;
-				GPIOA -> BSRR |= GPIO_BSRR_BR7;
+				TIM3 -> CCR4 = (y*z)/25;//L
+				TIM3 -> CCR3 = ((x-buffer)*z)/25;//R
+				GPIOB -> BSRR |= GPIO_BSRR_BR10;
+				GPIOB -> BSRR |= GPIO_BSRR_BR11;
 			}
 		}
 	}
@@ -235,17 +260,17 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 		if(y>=x)//Left Back
 		{
 			x=y-x;
-			TIM3 -> CCR2 = ((y-buffer)*z)/25;//L
-			TIM3 -> CCR1 = (x*z)/25;//R
-			GPIOA -> BSRR |= GPIO_BSRR_BS6;
-			GPIOA -> BSRR |= GPIO_BSRR_BS7;
+			TIM3 -> CCR4 = ((y-buffer)*z)/25;//L
+			TIM3 -> CCR3 = (x*z)/25;//R
+			GPIOB -> BSRR |= GPIO_BSRR_BS10;
+			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 		else //Bottom of Left
 		{
-			TIM3 -> CCR2 = 0;//FL
-			TIM3 -> CCR1 = 0;//FR
-			GPIOA -> BSRR |= GPIO_BSRR_BS6;
-			GPIOA -> BSRR |= GPIO_BSRR_BS7;
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
+			GPIOB -> BSRR |= GPIO_BSRR_BS10;
+			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 	}
 	else if(x>buffer1 && y<buffer2)//Bottom-Right
@@ -254,29 +279,45 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 		if(y>=x)//Right of Back
 		{
 			x=y-x;
-			TIM3 -> CCR2 = (x*z)/25;//L
-			TIM3 -> CCR1 = ((y-buffer)*z)/25;//R
-			GPIOA -> BSRR |= GPIO_BSRR_BS6;
-			GPIOA -> BSRR |= GPIO_BSRR_BS7;
+			TIM3 -> CCR4 = (x*z)/25;//L
+			TIM3 -> CCR3 = ((y-buffer)*z)/25;//R
+			GPIOB -> BSRR |= GPIO_BSRR_BS10;
+			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 		else //Bottom of Right
 		{
 			y=x-y;
-			TIM3 -> CCR2 = 0;//FL
-			TIM3 -> CCR1 = 0;//FR
-			GPIOA -> BSRR |= GPIO_BSRR_BS6;
-			GPIOA -> BSRR |= GPIO_BSRR_BS7;
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
+			GPIOB -> BSRR |= GPIO_BSRR_BS10;
+			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 	}
 	else if(c1=='m'||c1=='M'||c1=='c'||c1=='n'||c1=='N')
 	{
-		if(c1=='c')
-		{
-			GPIOA -> BSRR |= GPIO_BSRR_BR8;
-			GPIOB -> BSRR |= GPIO_BSRR_BR5;
-			GPIOB -> BSRR |= GPIO_BSRR_BR6;
-			GPIOB -> BSRR |= GPIO_BSRR_BR7;
-		}
+//		if(c1=='c')
+//		{
+//			TIM4 -> CCR3 = servo1;
+//			TIM4 -> CCR4 = servo2;
+//		}
+//		if(c1=='m')
+//		{
+//			servo1++;
+//		}
+//		if(c1=='M')
+//		{
+//			servo1--;
+//		}
+//		if(c1=='m')
+//		{
+//			servo2++;
+//		}
+//		if(c1=='M')
+//		{
+//			servo2--;
+//		}
+//		TIM4 -> CCR3 = servo1;
+//		TIM4 -> CCR4 = servo2;
 	}
 }
 
@@ -300,26 +341,26 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 
 	if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==2)//centre
 	{
-		TIM3 -> CCR2 = 0;//FL
-		TIM3 -> CCR1 = 0;//FR
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = 0;//FL
+		TIM3 -> CCR3 = 0;//FR
+		GPIOA -> BSRR |= GPIO_BSRR_BR10;
+		GPIOA -> BSRR |= GPIO_BSRR_BR11;
 	}
 
 	//2-Axis
 	else if(x<=buffer1 && x>=buffer2 && y>=buffer1)//forward
 	{
-		TIM3 -> CCR2 = ((y-buffer)*z)/25;//L
-		TIM3 -> CCR1 = ((y-buffer)*z)/25;//R
-		GPIOA -> BSRR |= GPIO_BSRR_BS6;
-		GPIOA -> BSRR |= GPIO_BSRR_BS7;
+		TIM3 -> CCR4 = ((y-buffer)*z)/25;//L
+		TIM3 -> CCR3 = ((y-buffer)*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BS10;
+		GPIOB -> BSRR |= GPIO_BSRR_BS11;
 	}
 	else if(x<=buffer1 && x>=buffer2 && y<=buffer2)//backward
 	{
-		TIM3 -> CCR2 = ((buffer-y)*z)/25;//L
-		TIM3 -> CCR1 = ((buffer-y)*z)/25;//R
-		GPIOA -> BSRR |= GPIO_BSRR_BR6;
-		GPIOA -> BSRR |= GPIO_BSRR_BR7;
+		TIM3 -> CCR4 = ((buffer-y)*z)/25;//L
+		TIM3 -> CCR3 = ((buffer-y)*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
 
 
@@ -327,10 +368,10 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	{
 		if(c1=='c')
 		{
-			GPIOA -> BSRR |= GPIO_BSRR_BR8;
-			GPIOB -> BSRR |= GPIO_BSRR_BR5;
-			GPIOB -> BSRR |= GPIO_BSRR_BR6;
-			GPIOB -> BSRR |= GPIO_BSRR_BR7;
+//			GPIOA -> BSRR |= GPIO_BSRR_BR8;
+//			GPIOB -> BSRR |= GPIO_BSRR_BR5;
+//			GPIOB -> BSRR |= GPIO_BSRR_BR6;
+//			GPIOB -> BSRR |= GPIO_BSRR_BR7;
 		}
 	}
 }
@@ -358,6 +399,7 @@ int main()
 
 	uint16_t A = 0;
 
+
 	while(1)
 	{
 		USART1 -> CR1 |= USART_CR1_RE;
@@ -365,7 +407,7 @@ int main()
 		emStop();
 		A = USART1 -> DR;
 
-		if(A == 'a')
+		if(A == 'a' || A=='A')
 		{
 			uint32_t x = 0;
 			uint32_t y = 0;
@@ -430,7 +472,11 @@ int main()
 			if(y1==65536)
 				y1=65535;
 
-			motorCode(x1, y1, z1, w1, c1);
+			if(A=='a')
+				motorCode(x1, y1, z1, w1, c1);
+
+			if(A=='A')
+				motorCode1(x1, y1, z1, w1, c1);
 
 			x1=0;
 			y1=0;
@@ -438,80 +484,66 @@ int main()
 			w1=0;
 			c1=0;
 		}
-
-		if(A=='A')
-		{
-			uint32_t x = 0;
-			uint32_t y = 0;
-			uint32_t x1 = 0;
-			uint32_t y1 = 0;
-			uint8_t z = 0;
-			uint8_t z1 = 0;
-			uint8_t w = 0;
-			uint8_t w1 = 0;
-			uint8_t c1=0;
-
-			for(int i=0;i<4;i++)
-			{
-				emStop();
-				x = USART1 -> DR;
-				x = x - 48;
-				x1 = x + x1*10;
-			}
-			//x1 is output
-
-			for(int j=0;j<4;j++)
-			{
-				emStop();
-				y = USART1 -> DR;
-				y = y - 48;
-				y1 = y + y1*10;
-			}
-			//y1 is output
-
-			for(int k=0;k<2;k++)
-			{
-				emStop();
-				z = USART1 -> DR;
-				z = z - 48;
-				z1 = z + z1*10;
-			}
-
-			emStop();
-			w = USART1 -> DR;
-			w = w - 48;
-			w1 = w;
-
-			emStop();
-			c1 = USART1 -> DR;
-
-			y1 = y1 - 1024;
-			z1 = z1 - 13;
-			x1 = x1 - 1024;
-
-			if(x1==2047)
-				x1=2048;
-
-			if(y1==1)
-				y1=0;
-
-			x1 = x1*32;
-			y1 = y1*32;
-
-			if(x1==65536)
-				x1=65535;
-
-			if(y1==65536)
-				y1=65535;
-
-			motorCode1(x1, y1, z1, w1, c1);
-
-			x1=0;
-			y1=0;
-			z1=0;
-			w1=0;
-			c1=0;
-		}
+//		if(A=='r')
+//		{
+//			uint32_t sBase=0;
+//			uint32_t sBase1=0;
+//
+//			emStop();
+//			A = USART1 -> DR;
+//
+//			if(A=='s' || A=='S')//s or S Swivel Base
+//			{
+//				for(int i=0;i<4;i++)
+//				{
+//					emStop();
+//					sBase = sBase - 48;
+//					sBase1 = sBase1*10 + sBase;
+//				}
+//				//Main code for swivel base
+//				TIM1 -> CR1 |= TIM_CR1_CEN;
+//				TIM1 -> CCER |= TIM_CCER_CC3NE;
+//				TIM1 -> CCER |= TIM_CCER_CC2NE;
+//
+//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_1;
+//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_0;
+//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
+//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_1;
+//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+//
+//				for(int i=0;i<2;i++)
+//				{
+//					emStop();
+//					sBase = USART1-> DR;
+//					sBase = sBase - 48;
+//					sBase1 = sBase1*10 + sBase;
+//				}
+//
+//				sBase1 = sBase1-12;
+//				sBase1 = sBase1*1260;
+//
+//				if(A=='s')//s forward
+//				{
+//					TIM1 -> CCR2 = 0;
+//					TIM1 -> CCR3 = sBase1;
+//
+//				}
+//				else if(A=='S')//S backward
+//				{
+//					TIM1 -> CCR2 = 32768;
+//					TIM1 -> CCR3 = sBase1;
+//				}
+//				sBase=0;
+//				sBase1=0;
+//			}
+//
+//			if(A=='c')
+//			{
+//				TIM1 -> CCR2 = 0;
+//				TIM1 -> CCR3 = 0;
+//			}
+//		}
 	}
 }
 
