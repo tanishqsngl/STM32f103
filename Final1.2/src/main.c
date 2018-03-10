@@ -322,7 +322,7 @@ void Delay(int time)
 {
 	volatile int i,j;
 
-	time = time*100;
+	time = time*10;
 	for (i=0;i<time;i++)
 		j++;
 }
@@ -514,8 +514,8 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 		if(c1=='M')
 		{
 			servo1--;
-			if(servo1<1000)
-				servo1=1000;
+			if(servo1<400)
+				servo1=400;
 		}
 		if(c1=='n')
 		{
@@ -526,8 +526,8 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 		if(c1=='N')
 		{
 			servo2--;
-			if(servo2<1000)
-				servo2=1000;
+			if(servo2<400)
+				servo2=400;
 		}
 		if(c1=='c')
 		{
