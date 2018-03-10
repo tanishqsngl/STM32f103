@@ -48,38 +48,38 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-Final1.2.bin \
+Final_1.2.bin \
 
 SECONDARY_SIZE += \
-Final1.2.siz \
+Final_1.2.siz \
 
 
 # All Target
-all: Final1.2.elf secondary-outputs
+all: Final_1.2.elf secondary-outputs
 
 # Tool invocations
-Final1.2.elf: $(OBJS) $(USER_OBJS)
+Final_1.2.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM GNU C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m3 -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra  -g -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Final1.2.map" --specs=nano.specs -o "Final1.2.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m3 -mthumb -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra  -g -T mem.ld -T libs.ld -T sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"Final_1.2.map" --specs=nano.specs -o "Final_1.2.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Final1.2.bin: Final1.2.elf
+Final_1.2.bin: Final_1.2.elf
 	@echo 'Invoking: Cross ARM GNU Create Flash Image'
-	arm-none-eabi-objcopy -O binary "Final1.2.elf"  "Final1.2.bin"
+	arm-none-eabi-objcopy -O binary "Final_1.2.elf"  "Final_1.2.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Final1.2.siz: Final1.2.elf
+Final_1.2.siz: Final_1.2.elf
 	@echo 'Invoking: Cross ARM GNU Print Size'
-	arm-none-eabi-size --format=berkeley "Final1.2.elf"
+	arm-none-eabi-size --format=berkeley "Final_1.2.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS)$(CPP_DEPS) Final1.2.elf
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS)$(CPP_DEPS) Final_1.2.elf
 	-@echo ' '
 
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_SIZE)
