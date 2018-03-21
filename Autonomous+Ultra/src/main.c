@@ -28,7 +28,7 @@ void emStop(void)
 {
 	long t=0;
 
-	while(!(USART1 -> SR & (1<<5)))
+	while(!(USART1 -> SR && (1<<5)))
 	{
 		t++;
 		if(t>=8000000)//1 second
@@ -44,7 +44,7 @@ void emStop1(void)
 {
 	long t=0;
 
-	while(!(USART2 -> SR & (1<<5)))
+	while(!(USART2 -> SR && (1<<5)))
 	{
 		t++;
 		if(t>=8000000)//1 second

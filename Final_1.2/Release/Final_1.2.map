@@ -289,7 +289,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./src/main.o
  .data          0x0000000000000000        0x0 ./src/main.o
  .bss           0x0000000000000000        0x0 ./src/main.o
- .text.emStop1  0x0000000000000000       0x10 ./src/main.o
+ .text.emStop1  0x0000000000000000       0x68 ./src/main.o
  .text.map      0x0000000000000000       0x18 ./src/main.o
  .text          0x0000000000000000        0x0 /home/tanishq/Downloads/gcc-arm-none-eabi-6-2017-q1-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/libg_nano.a(lib_a-errno.o)
  .data          0x0000000000000000        0x0 /home/tanishq/Downloads/gcc-arm-none-eabi-6-2017-q1-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/libg_nano.a(lib_a-errno.o)
@@ -484,10 +484,10 @@ END GROUP
 
 .inits          0x000000000800022c       0x28
                 0x000000000800022c                __data_regions_array_start = .
-                0x000000000800022c        0x4 LONG 0x8001580 LOADADDR (.data)
+                0x000000000800022c        0x4 LONG 0x80015fc LOADADDR (.data)
                 0x0000000008000230        0x4 LONG 0x20000000 ADDR (.data)
                 0x0000000008000234        0x4 LONG 0x20000024 (ADDR (.data) + SIZEOF (.data))
-                0x0000000008000238        0x4 LONG 0x8001580 LOADADDR (.data_CCMRAM)
+                0x0000000008000238        0x4 LONG 0x80015fc LOADADDR (.data_CCMRAM)
                 0x000000000800023c        0x4 LONG 0x0 ADDR (.data_CCMRAM)
                 0x0000000008000240        0x4 LONG 0x0 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x0000000008000244                __data_regions_array_end = .
@@ -519,7 +519,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x0000000008000254     0x132c
+.text           0x0000000008000254     0x13a8
  *(.text .text.*)
  .text._exit    0x0000000008000254        0x6 ./system/src/newlib/_exit.o
                 0x0000000008000254                _exit
@@ -544,85 +544,85 @@ END GROUP
                 0x000000000800039c                SystemCoreClockUpdate
  .text.stopArm  0x00000000080003f8       0xd4 ./src/main.o
                 0x00000000080003f8                stopArm
- .text.emStop   0x00000000080004cc       0x10 ./src/main.o
+ .text.emStop   0x00000000080004cc       0x68 ./src/main.o
                 0x00000000080004cc                emStop
  .text.timerSetup
-                0x00000000080004dc      0x2f0 ./src/main.o
-                0x00000000080004dc                timerSetup
+                0x0000000008000534      0x2f0 ./src/main.o
+                0x0000000008000534                timerSetup
  .text.GPIOSetup
-                0x00000000080007cc       0x38 ./src/main.o
-                0x00000000080007cc                GPIOSetup
+                0x0000000008000824       0x38 ./src/main.o
+                0x0000000008000824                GPIOSetup
  .text.UARTSetup
-                0x0000000008000804       0x44 ./src/main.o
-                0x0000000008000804                UARTSetup
+                0x000000000800085c       0x44 ./src/main.o
+                0x000000000800085c                UARTSetup
  .text.UARTSetup1
-                0x0000000008000848       0x44 ./src/main.o
-                0x0000000008000848                UARTSetup1
- .text.Delay    0x000000000800088c       0x20 ./src/main.o
-                0x000000000800088c                Delay
+                0x00000000080008a0       0x44 ./src/main.o
+                0x00000000080008a0                UARTSetup1
+ .text.Delay    0x00000000080008e4       0x20 ./src/main.o
+                0x00000000080008e4                Delay
  .text.DCServoF
-                0x00000000080008ac       0xac ./src/main.o
-                0x00000000080008ac                DCServoF
+                0x0000000008000904       0xac ./src/main.o
+                0x0000000008000904                DCServoF
  .text.DCServoB
-                0x0000000008000958       0xac ./src/main.o
-                0x0000000008000958                DCServoB
+                0x00000000080009b0       0xac ./src/main.o
+                0x00000000080009b0                DCServoB
  .text.DCServoF1
-                0x0000000008000a04       0xac ./src/main.o
-                0x0000000008000a04                DCServoF1
+                0x0000000008000a5c       0xac ./src/main.o
+                0x0000000008000a5c                DCServoF1
  .text.DCServoB1
-                0x0000000008000ab0       0xac ./src/main.o
-                0x0000000008000ab0                DCServoB1
+                0x0000000008000b08       0xac ./src/main.o
+                0x0000000008000b08                DCServoB1
  .text.motorCode1
-                0x0000000008000b5c       0xf8 ./src/main.o
-                0x0000000008000b5c                motorCode1
+                0x0000000008000bb4       0xf8 ./src/main.o
+                0x0000000008000bb4                motorCode1
  .text.motorCode
-                0x0000000008000c54      0x4dc ./src/main.o
-                0x0000000008000c54                motorCode
+                0x0000000008000cac      0x4dc ./src/main.o
+                0x0000000008000cac                motorCode
  .text.RoboticArm
-                0x0000000008001130      0x2a0 ./src/main.o
-                0x0000000008001130                RoboticArm
+                0x0000000008001188      0x2b8 ./src/main.o
+                0x0000000008001188                RoboticArm
  .text.startup.main
-                0x00000000080013d0      0x1b0 ./src/main.o
-                0x00000000080013d0                main
+                0x0000000008001440      0x1bc ./src/main.o
+                0x0000000008001440                main
  *(.rodata .rodata.* .constdata .constdata.*)
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x0000000008001580        0x0 linker stubs
+ .glue_7        0x00000000080015fc        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0000000008001580        0x0 linker stubs
+ .glue_7t       0x00000000080015fc        0x0 linker stubs
 
-.vfp11_veneer   0x0000000008001580        0x0
- .vfp11_veneer  0x0000000008001580        0x0 linker stubs
+.vfp11_veneer   0x00000000080015fc        0x0
+ .vfp11_veneer  0x00000000080015fc        0x0 linker stubs
 
-.v4_bx          0x0000000008001580        0x0
- .v4_bx         0x0000000008001580        0x0 linker stubs
+.v4_bx          0x00000000080015fc        0x0
+ .v4_bx         0x00000000080015fc        0x0 linker stubs
 
-.iplt           0x0000000008001580        0x0
- .iplt          0x0000000008001580        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.iplt           0x00000000080015fc        0x0
+ .iplt          0x00000000080015fc        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
-.rel.dyn        0x0000000008001580        0x0
- .rel.iplt      0x0000000008001580        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.rel.dyn        0x00000000080015fc        0x0
+ .rel.iplt      0x00000000080015fc        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000008001580                . = ALIGN (0x4)
-                0x0000000008001580                __exidx_start = .
+                0x00000000080015fc                . = ALIGN (0x4)
+                0x00000000080015fc                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000008001580                __exidx_end = .
-                0x0000000008001580                . = ALIGN (0x4)
-                0x0000000008001580                _etext = .
-                0x0000000008001580                __etext = .
+                0x00000000080015fc                __exidx_end = .
+                0x00000000080015fc                . = ALIGN (0x4)
+                0x00000000080015fc                _etext = .
+                0x00000000080015fc                __etext = .
 
-.data_CCMRAM    0x0000000000000000        0x0 load address 0x0000000008001580
+.data_CCMRAM    0x0000000000000000        0x0 load address 0x00000000080015fc
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x0000000000000000                . = ALIGN (0x4)
-                0x0000000008001580                _sidata = LOADADDR (.data)
+                0x00000000080015fc                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x24 load address 0x0000000008001580
+.data           0x0000000020000000       0x24 load address 0x00000000080015fc
  FILL mask 0xff
                 0x0000000020000000                _sdata = .
                 0x0000000020000000                __data_start__ = .
@@ -645,7 +645,7 @@ END GROUP
                 0x0000000020000024                _edata = .
                 0x0000000020000024                __data_end__ = .
 
-.igot.plt       0x0000000020000024        0x0 load address 0x00000000080015a4
+.igot.plt       0x0000000020000024        0x0 load address 0x0000000008001620
  .igot.plt      0x0000000020000024        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .bss_CCMRAM     0x0000000000000000        0x0
@@ -806,7 +806,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x3c2f
+.debug_info     0x0000000000000000     0x3c8f
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x967 ./system/src/newlib/_exit.o
  .debug_info    0x0000000000000967      0x3d1 ./system/src/newlib/_startup.o
@@ -816,7 +816,7 @@ END GROUP
  .debug_info    0x0000000000001cd6      0xad2 ./system/src/cortexm/exception_handlers.o
  .debug_info    0x00000000000027a8      0x49f ./system/src/cmsis/system_stm32f10x.o
  .debug_info    0x0000000000002c47       0xcd ./system/src/cmsis/vectors_stm32f10x.o
- .debug_info    0x0000000000002d14      0xf1b ./src/main.o
+ .debug_info    0x0000000000002d14      0xf7b ./src/main.o
 
 .debug_abbrev   0x0000000000000000      0xedc
  *(.debug_abbrev)
@@ -830,7 +830,7 @@ END GROUP
  .debug_abbrev  0x0000000000000b40       0x9a ./system/src/cmsis/vectors_stm32f10x.o
  .debug_abbrev  0x0000000000000bda      0x302 ./src/main.o
 
-.debug_line     0x0000000000000000     0x11b3
+.debug_line     0x0000000000000000     0x11e9
  *(.debug_line)
  .debug_line    0x0000000000000000      0x1ca ./system/src/newlib/_exit.o
  .debug_line    0x00000000000001ca      0x10d ./system/src/newlib/_startup.o
@@ -840,9 +840,9 @@ END GROUP
  .debug_line    0x00000000000006fc      0x1f0 ./system/src/cortexm/exception_handlers.o
  .debug_line    0x00000000000008ec      0x16b ./system/src/cmsis/system_stm32f10x.o
  .debug_line    0x0000000000000a57       0x58 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_line    0x0000000000000aaf      0x704 ./src/main.o
+ .debug_line    0x0000000000000aaf      0x73a ./src/main.o
 
-.debug_frame    0x0000000000000000      0x458
+.debug_frame    0x0000000000000000      0x47c
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0x40 ./system/src/newlib/_exit.o
  .debug_frame   0x0000000000000040       0x80 ./system/src/newlib/_startup.o
@@ -852,9 +852,9 @@ END GROUP
  .debug_frame   0x0000000000000168       0xe0 ./system/src/cortexm/exception_handlers.o
  .debug_frame   0x0000000000000248       0x3c ./system/src/cmsis/system_stm32f10x.o
  .debug_frame   0x0000000000000284       0x20 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_frame   0x00000000000002a4      0x1b4 ./src/main.o
+ .debug_frame   0x00000000000002a4      0x1d8 ./src/main.o
 
-.debug_str      0x0000000000000000      0xd3c
+.debug_str      0x0000000000000000      0xd69
  *(.debug_str)
  .debug_str     0x0000000000000000      0x57d ./system/src/newlib/_exit.o
                                         0x5ee (size before relaxing)
@@ -872,16 +872,16 @@ END GROUP
                                         0x328 (size before relaxing)
  .debug_str     0x0000000000000ab0       0x57 ./system/src/cmsis/vectors_stm32f10x.o
                                         0x1d7 (size before relaxing)
- .debug_str     0x0000000000000b07      0x235 ./src/main.o
-                                        0x44e (size before relaxing)
+ .debug_str     0x0000000000000b07      0x262 ./src/main.o
+                                        0x44f (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x11dd
+.debug_loc      0x0000000000000000     0x11fa
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0x21 ./system/src/newlib/_exit.o
  .debug_loc     0x0000000000000021      0x148 ./system/src/newlib/_startup.o
  .debug_loc     0x0000000000000169       0x63 ./system/src/newlib/_syscalls.o
  .debug_loc     0x00000000000001cc       0xb1 ./system/src/cmsis/system_stm32f10x.o
- .debug_loc     0x000000000000027d      0xf60 ./src/main.o
+ .debug_loc     0x000000000000027d      0xf7d ./src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -899,7 +899,7 @@ END GROUP
  *(.debug_varnames)
 OUTPUT(Final_1.2.elf elf32-littlearm)
 
-.debug_ranges   0x0000000000000000      0x370
+.debug_ranges   0x0000000000000000      0x358
  .debug_ranges  0x0000000000000000       0x18 ./system/src/newlib/_exit.o
  .debug_ranges  0x0000000000000018       0xa0 ./system/src/newlib/_startup.o
  .debug_ranges  0x00000000000000b8       0x20 ./system/src/newlib/_syscalls.o
@@ -908,4 +908,4 @@ OUTPUT(Final_1.2.elf elf32-littlearm)
  .debug_ranges  0x0000000000000100       0x70 ./system/src/cortexm/exception_handlers.o
  .debug_ranges  0x0000000000000170       0x30 ./system/src/cmsis/system_stm32f10x.o
  .debug_ranges  0x00000000000001a0       0x10 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_ranges  0x00000000000001b0      0x1c0 ./src/main.o
+ .debug_ranges  0x00000000000001b0      0x1a8 ./src/main.o

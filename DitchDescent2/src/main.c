@@ -2,19 +2,23 @@
 
 void emStop(void)
 {
-	long t=0;
+	int b = 0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> PSC = 7200;
+    TIM2 -> ARR = 10000;
+    TIM2 -> CR1 &= ~(TIM_CR1_CEN);
 
 	while(!(USART1 -> SR & (1<<5)))
 	{
-		t++;
-		if(t>=4000000)//1 second
+		TIM2 -> CR1 |= TIM_CR1_CEN;
+		b = TIM2 -> CNT;
+		if(b >= 1500)
 		{
-			TIM3 -> CCR2 = 1;//FL
-			TIM3 -> CCR1 = 1;//F5
-			GPIOA -> BSRR |= GPIO_BSRR_BR4;
-			GPIOA -> BSRR |= GPIO_BSRR_BR5;
+			TIM3 -> CCR2 = 0;//FL
+			TIM3 -> CCR1 = 0;//FR
 		}
 	}
+	TIM2 -> CNT = 0;
 }
 
 void timerSetup(void)
@@ -484,66 +488,6 @@ int main()
 			w1=0;
 			c1=0;
 		}
-//		if(A=='r')
-//		{
-//			uint32_t sBase=0;
-//			uint32_t sBase1=0;
-//
-//			emStop();
-//			A = USART1 -> DR;
-//
-//			if(A=='s' || A=='S')//s or S Swivel Base
-//			{
-//				for(int i=0;i<4;i++)
-//				{
-//					emStop();
-//					sBase = sBase - 48;
-//					sBase1 = sBase1*10 + sBase;
-//				}
-//				//Main code for swivel base
-//				TIM1 -> CR1 |= TIM_CR1_CEN;
-//				TIM1 -> CCER |= TIM_CCER_CC3NE;
-//				TIM1 -> CCER |= TIM_CCER_CC2NE;
-//
-//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_2;
-//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_1;
-//				TIM1 -> CCMR2 |= TIM_CCMR2_OC3M_0;
-//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
-//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_1;
-//				TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
-//
-//				for(int i=0;i<2;i++)
-//				{
-//					emStop();
-//					sBase = USART1-> DR;
-//					sBase = sBase - 48;
-//					sBase1 = sBase1*10 + sBase;
-//				}
-//
-//				sBase1 = sBase1-12;
-//				sBase1 = sBase1*1260;
-//
-//				if(A=='s')//s forward
-//				{
-//					TIM1 -> CCR2 = 0;
-//					TIM1 -> CCR3 = sBase1;
-//
-//				}
-//				else if(A=='S')//S backward
-//				{
-//					TIM1 -> CCR2 = 32768;
-//					TIM1 -> CCR3 = sBase1;
-//				}
-//				sBase=0;
-//				sBase1=0;
-//			}
-//
-//			if(A=='c')
-//			{
-//				TIM1 -> CCR2 = 0;
-//				TIM1 -> CCR3 = 0;
-//			}
-//		}
 	}
 }
 

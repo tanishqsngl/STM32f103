@@ -35,37 +35,46 @@ void stopArm(void)
 
 void emStop(void)
 {
-	int t=0;
+	int b = 0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> PSC = 7200;
+    TIM2 -> ARR = 10000;
+    TIM2 -> CR1 &= ~(TIM_CR1_CEN);
 
-	while(!((USART1->SR)&(1<<5)))
+	while(!(USART1 -> SR & (1<<5)))
 	{
-		t++;
-		if(t==327680)//0.5 second
+		TIM2 -> CR1 |= TIM_CR1_CEN;
+		b = TIM2 -> CNT;
+		if(b >= 1500)
 		{
-			TIM3 -> CCR4 = 2;//FL
-			TIM3 -> CCR3 = 2;//FR
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
 			stopArm();
-			GPIOB -> BSRR |= GPIO_BSRR_BS10;
 		}
-		t=0;
 	}
+	TIM2 -> CNT = 0;
 }
 
 void emStop1(void)
 {
-	long t=0;
+	int b = 0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> PSC = 7200;
+    TIM2 -> ARR = 10000;
+    TIM2 -> CR1 &= ~(TIM_CR1_CEN);
 
 	while(!(USART2 -> SR & (1<<5)))
 	{
-		t++;
-		if(t>=4000000)//0.5 second
+		TIM2 -> CR1 |= TIM_CR1_CEN;
+		b = TIM2 -> CNT;
+		if(b >= 1500)
 		{
-			TIM3 -> CCR4 = 2;//FL
-			TIM3 -> CCR3 = 2;//FR
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
 			stopArm();
 		}
-		t=0;
 	}
+	TIM2 -> CNT = 0;
 }
 
 void timerSetup(void)

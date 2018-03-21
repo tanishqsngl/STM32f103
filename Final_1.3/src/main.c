@@ -35,37 +35,46 @@ void stopArm(void)
 
 void emStop(void)
 {
-	int t=0;
+	int b = 0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> PSC = 7200;
+    TIM2 -> ARR = 10000;
+    TIM2 -> CR1 &= ~(TIM_CR1_CEN);
 
-	while(!((USART1->SR)&(1<<5)))
+	while(!(USART1 -> SR & (1<<5)))
 	{
-		t++;
-		if(t==327680)//0.5 second
+		TIM2 -> CR1 |= TIM_CR1_CEN;
+		b = TIM2 -> CNT;
+		if(b >= 1500)
 		{
-			TIM3 -> CCR4 = 2;//FL
-			TIM3 -> CCR3 = 2;//FR
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
 			stopArm();
-			GPIOB -> BSRR |= GPIO_BSRR_BS10;
 		}
-		t=0;
 	}
+	TIM2 -> CNT = 0;
 }
 
 void emStop1(void)
 {
-	long t=0;
+	int b = 0;
+    TIM2 -> CR1 |= TIM_CR1_ARPE;
+    TIM2 -> PSC = 7200;
+    TIM2 -> ARR = 10000;
+    TIM2 -> CR1 &= ~(TIM_CR1_CEN);
 
 	while(!(USART2 -> SR & (1<<5)))
 	{
-		t++;
-		if(t>=4000000)//0.5 second
+		TIM2 -> CR1 |= TIM_CR1_CEN;
+		b = TIM2 -> CNT;
+		if(b >= 1500)
 		{
-			TIM3 -> CCR4 = 2;//FL
-			TIM3 -> CCR3 = 2;//FR
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
 			stopArm();
 		}
-		t=0;
 	}
+	TIM2 -> CNT = 0;
 }
 
 void timerSetup(void)
@@ -163,7 +172,7 @@ void GPIOSetup(void)
 	GPIOA -> CRL = 0xBB334333;
 	GPIOA -> CRH = 0x000334B3;
 	GPIOB -> CRL = 0x333000BB;
-	GPIOB -> CRH = 0xBB3333BB;
+	GPIOB -> CRH = 0xBB0033BB;
 	GPIOC -> CRH = 0x33300000;
 }
 
@@ -325,6 +334,12 @@ void Delay(int time)
 	time = time*10;
 	for (i=0;i<time;i++)
 		j++;
+}
+
+void us_delay(uint32_t j)
+{
+	for(uint32_t i=0;i<=(8*j);i++)
+	{}
 }
 
 void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
@@ -591,69 +606,6 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	}
 }
 
-void ultrasonic(int threshold)
-{
-    int flag1=0, flag2=0, count=0, count2=0;
-
-    GPIOA->BSRR=(1<<5);
-    delay(100);
-    GPIOA->BRR=(1<<5);
-
-    while(!((GPIOB->IDR)&&(1<<4)));
-
-    while((GPIOB->IDR)&&(1<<4))
-    {
-        count++;
-    }
-
-    if (count<=threshold)
-    {
-        flag1=1;
-    }
-
-    GPIOB->BSRR=(1<<13);
-    delay(100);
-    GPIOB->BRR=(1<<13);
-
-    while(!((GPIOB->IDR)&&(1<<12)));
-
-    while((GPIOB->IDR)&&(1<<12))
-    {
-        count2++;
-    }
-
-    if (count2<=threshold)
-    {
-        flag2=1;
-    }
-
-    if(flag1==1)
-    {
-        //give command for stopping the rover for 0.5 second
-    	motorCode(32768,32768,13,2,'c');
-    	delay(500);
-        //give command for moving the rover backwards for 1 second
-    	motorCode(32768,0,25,2,'c');
-    	delay(1000);
-        //give command for turning in one direction for 2 seconds
-    	motorCode(32768,32768,25,1,'c');
-    	delay(2000);
-    }
-
-    if(flag2==1)
-    {
-        //give command for stopping the rover for 0.5 second
-    	motorCode(32768,32768,13,2,'c');
-    	delay(500);
-        //give command for moving the rover backwards for 1 second
-    	motorCode(32768,0,25,2,'c');
-    	delay(1000);
-        //give command for turning in the other direction for 2 seconds
-    	motorCode(32768,32768,25,3,'c');
-    	delay(2000);
-    }
-}
-
 void RoboticArm(uint32_t A)
 {
 	uint16_t sBase = 0;
@@ -855,6 +807,81 @@ void RoboticArm(uint32_t A)
 	servoD21 = 0;
 }
 
+void ultrasonic(uint16_t thr)
+{
+	uint32_t a=0, flag1=0, a1=0, flag2=0;
+
+	GPIOA -> BSRR |= GPIO_BSRR_BS0;
+	us_delay(100);
+	GPIOA -> BRR |= GPIO_BRR_BR0;
+
+	while(!((GPIOB -> IDR)&(1<<12)))
+	{}
+
+	while((GPIOB -> IDR)&(1<<12))
+	{
+		a++;
+	}
+
+	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+	us_delay(100);
+	GPIOA -> BRR |= GPIO_BRR_BR1;
+
+	while(!((GPIOB -> IDR)&(1<<13)))
+	{}
+
+	while((GPIOB -> IDR)&(1<<13))
+	{
+		a1++;
+	}
+
+	if(a<=thr)
+	{
+		flag1=1;
+	}
+
+	if(a1<=thr)
+	{
+		flag2=1;
+	}
+
+	if(flag1==1)
+	{
+		//stop
+		motorCode(32768,32768,13,2,'c');
+		us_delay(1000000);
+		//move back
+		motorCode(32768,0,22,2,'c');
+		us_delay(500000);
+		//rotate left
+		motorCode(32768,32768,22,1,'c');
+		us_delay(1500000);
+		//forward
+		motorCode(32768,65535,22,1,'c');
+		us_delay(2000000);
+		//stop
+		motorCode(32768,32768,13,2,'c');
+	}
+
+	else if(flag2==1)
+	{
+		//stop
+		motorCode(32768,32768,13,2,'c');
+		us_delay(1000000);
+		//move back
+		motorCode(32768,0,22,2,'c');
+		us_delay(500000);
+		//rotate left
+		motorCode(32768,32768,22,3,'c');
+		us_delay(1500000);
+		//forward
+		motorCode(32768,65535,22,2,'c');
+		us_delay(2000000);
+		//stop
+		motorCode(32768,32768,13,2,'c');
+	}
+}
+
 int main()
 {
 	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
@@ -990,13 +1017,13 @@ int main()
 		if(count==1)
 		{
 			emStop1();
-			ultrasonic(5000);
+			ultrasonic(15000);
 			B = USART2 -> DR;
 
 			if(B=='l')
 				count=0;
 
-			if(B == 'a')
+			if(B=='a')
 			{
 				stopArm();
 

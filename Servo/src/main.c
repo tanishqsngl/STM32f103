@@ -9,7 +9,7 @@ int main(void)
 	GPIOA -> CRL |= (GPIO_CRL_MODE0_0);
 	GPIOA -> CRL |= (GPIO_CRL_MODE0_1);
 	GPIOA -> CRL &= ~(GPIO_CRL_CNF0_0);
-	GPIOA -> CRL &= ~(GPIO_CRL_CNF0_1);
+	GPIOA -> CRL |= (GPIO_CRL_CNF0_1);
 
 	TIM2 -> CR2 |= TIM_CR2_MMS_0;
 	TIM2 -> CR1 |= TIM_CR1_ARPE;
@@ -25,11 +25,8 @@ int main(void)
 	GPIOA -> ODR = 0x00;
 	TIM2 -> CR1 |= TIM_CR1_CEN;
 
-	//TIM2 -> CCR1 = 2000;
-
 	while(1)
 	{
-		TIM2 -> CCR1 = 2000;
-		//TIM2 -> CCR1 = 18000;
+		TIM2 -> CCR1 = 2400;
 	}
 }

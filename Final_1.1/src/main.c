@@ -26,17 +26,19 @@ void stopArm(void)
 
 void emStop(void)
 {
-	long t=0;
+	int t=0;
 
-	while(!(USART1 -> SR & (1<<5)))
+	while(!((USART1->SR)&(1<<5)))
 	{
 		t++;
-		if(t>=8000000)//0.5 second
+		if(t==327680)//0.5 second
 		{
 			TIM3 -> CCR4 = 2;//FL
 			TIM3 -> CCR3 = 2;//FR
 			stopArm();
+			GPIOB -> BSRR |= GPIO_BSRR_BS10;
 		}
+		t=0;
 	}
 }
 
@@ -47,12 +49,13 @@ void emStop1(void)
 	while(!(USART2 -> SR & (1<<5)))
 	{
 		t++;
-		if(t>=8000000)//0.5 second
+		if(t>=4000000)//0.5 second
 		{
 			TIM3 -> CCR4 = 2;//FL
 			TIM3 -> CCR3 = 2;//FR
 			stopArm();
 		}
+		t=0;
 	}
 }
 
