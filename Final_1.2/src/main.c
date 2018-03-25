@@ -67,7 +67,7 @@ void emStop1(void)
 	{
 		TIM2 -> CR1 |= TIM_CR1_CEN;
 		b = TIM2 -> CNT;
-		if(b >= 1500)
+		if(b >= 9500)
 		{
 			TIM3 -> CCR4 = 0;//FL
 			TIM3 -> CCR3 = 0;//FR
@@ -935,10 +935,13 @@ int main()
 
 		if(count==1)
 		{
-			if(A=='l')
+			emStop1();
+			B = USART2 -> DR;
+
+			if(B=='l')
 				count=0;
 
-			if(A == 'a')
+			if(B == 'a')
 			{
 				stopArm();
 
