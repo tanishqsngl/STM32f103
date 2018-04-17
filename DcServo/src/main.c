@@ -3,132 +3,55 @@
 void Delay(int time)
 {
 	volatile int i,j;
-	for (i=0;i<time*100;i++)
+	for (i=0;i<time*1;i++)
 		j++;
 }
 
 int main(void)
 {
-	RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
+	//RCC -> APB1ENR |= RCC_APB1ENR_TIM2EN;
 	//RCC -> APB1ENR |= RCC_APB1ENR_TIM3EN;
 	RCC -> APB2ENR |= RCC_APB2ENR_AFIOEN;
 	RCC -> APB2ENR |= RCC_APB2ENR_IOPAEN;
+	RCC -> APB2ENR |= RCC_APB2ENR_IOPCEN;
 	//RCC -> AHBENR |= RCC_AHBENR_DMA1EN;
 
 	//For PWM
-	GPIOA -> CRL |= GPIO_CRL_MODE1_0; //setting high speed (and) output
-	GPIOA -> CRL |= GPIO_CRL_MODE1_1;
-	GPIOA -> CRL |= GPIO_CRL_MODE2_0;
-	GPIOA -> CRL |= GPIO_CRL_MODE2_1;
-	GPIOA -> CRL &= ~(GPIO_CRL_CNF1_0);//push pull
-	GPIOA -> CRL |= GPIO_CRL_CNF1_1;
-	GPIOA -> CRL &= ~(GPIO_CRL_CNF2_0);
-	GPIOA -> CRL |= GPIO_CRL_CNF2_1;
-	GPIOA -> CRL |= GPIO_CRL_MODE0_0; //setting high speed (and) output
-	GPIOA -> CRL |= GPIO_CRL_MODE0_1;
-	GPIOA -> CRL |= GPIO_CRL_MODE3_0;
-	GPIOA -> CRL |= GPIO_CRL_MODE3_1;
-	GPIOA -> CRL &= ~(GPIO_CRL_CNF0_0);//push pull
-	GPIOA -> CRL |= GPIO_CRL_CNF0_1;
-	GPIOA -> CRL &= ~(GPIO_CRL_CNF3_0);
-	GPIOA -> CRL |= GPIO_CRL_CNF3_1;
-
-	TIM2 -> CR2 |= TIM_CR2_MMS_0;
-	TIM2 -> CR1 |= TIM_CR1_ARPE;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_2;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_1;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC1M_0;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC1PE;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC2M_2;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC2M_1;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC2M_0;
-	TIM2 -> CCMR1 |= TIM_CCMR1_OC2PE;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC3M_2;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC3M_1;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC3M_0;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC3PE;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC4M_2;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC4M_1;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC4M_0;
-	TIM2 -> CCMR2 |= TIM_CCMR2_OC4PE;
-	TIM2 -> CCER |= TIM_CCER_CC1E;
-	TIM2 -> CCER |= TIM_CCER_CC1P;
-	TIM2 -> CCER |= TIM_CCER_CC2E;
-	TIM2 -> CCER |= TIM_CCER_CC2P;
-	TIM2 -> CCER |= TIM_CCER_CC3E;
-	TIM2 -> CCER |= TIM_CCER_CC3P;
-	TIM2 -> CCER |= TIM_CCER_CC4E;
-	TIM2 -> CCER |= TIM_CCER_CC4P;
-	TIM2 -> ARR = 100;
-	TIM2 -> PSC = 0;
-	TIM2 -> EGR |= TIM_EGR_UG;
-	AFIO -> MAPR &= ~(AFIO_MAPR_TIM2_REMAP_1);
-	AFIO -> MAPR &= ~(AFIO_MAPR_TIM2_REMAP_0);
-	TIM2 -> CR1 |= TIM_CR1_CEN;
-
-	TIM2 -> CCR1 = 0;//FL
-	TIM2 -> CCR2 = 0;//FR
-	TIM2 -> CCR3 = 0;//BL
-	TIM2 -> CCR4 = 0;//BR
-
+	GPIOA -> CRL = 0xBB334333;
+	GPIOA -> CRH = 0x000334B3;
+	GPIOB -> CRL = 0x333000BB;
+	GPIOB -> CRH = 0xBB8833BB;
+	GPIOC -> CRH = 0x33300000;
 
   while (1)
     {
-	  TIM2 -> CCR1 = 100;//FL
-	  TIM2 -> CCR2 = 0;//FR
-	  TIM2 -> CCR3 = 0;//BL
-	  TIM2 -> CCR4 = 100;//BR
+		GPIOA -> BSRR |= GPIO_BSRR_BR0;
+		GPIOA -> BSRR |= GPIO_BSRR_BR1;
+		GPIOA -> BSRR |= GPIO_BSRR_BR2;
+		GPIOC -> BSRR |= GPIO_BSRR_BS15;
 
-	  Delay(2000);
+		Delay(2000);
 
-	  TIM2 -> CCR1 = 0;//FL
-	  TIM2 -> CCR2 = 0;//FR
-	  TIM2 -> CCR3 = 0;//BL
-	  TIM2 -> CCR4 = 100;//BR
+		GPIOA -> BSRR |= GPIO_BSRR_BR0;
+		GPIOA -> BSRR |= GPIO_BSRR_BS1;
+		GPIOA -> BSRR |= GPIO_BSRR_BR2;
+		GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
-	  Delay(2000);
+		Delay(2000);
 
-	  TIM2 -> CCR1 = 0;//FL
-	  TIM2 -> CCR2 = 0;//FR
-	  TIM2 -> CCR3 = 100;//BL
-	  TIM2 -> CCR4 = 100;//BR
+		GPIOA -> BSRR |= GPIO_BSRR_BR0;
+		GPIOA -> BSRR |= GPIO_BSRR_BR1;
+		GPIOA -> BSRR |= GPIO_BSRR_BS2;
+		GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
-	  Delay(2000);
+		Delay(2000);
 
-	  TIM2 -> CCR1 = 0;//FL
-	  TIM2 -> CCR2 = 0;//FR
-	  TIM2 -> CCR3 = 100;//BL
-	  TIM2 -> CCR4 = 0;//BR
+		GPIOA -> BSRR |= GPIO_BSRR_BS0;
+		GPIOA -> BSRR |= GPIO_BSRR_BR1;
+		GPIOA -> BSRR |= GPIO_BSRR_BR2;
+		GPIOC -> BSRR |= GPIO_BSRR_BR15;
 
-	  Delay(2000);
-
-	  TIM2 -> CCR1 = 0;//FL
-	  TIM2 -> CCR2 = 100;//FR
-	  TIM2 -> CCR3 = 100;//BL
-	  TIM2 -> CCR4 = 0;//BR
-
-	  Delay(2000);
-
-	  TIM2 -> CCR1 = 0;//FL
-	  TIM2 -> CCR2 = 100;//FR
-	  TIM2 -> CCR3 = 0;//BL
-	  TIM2 -> CCR4 = 0;//BR
-
-	  Delay(2000);
-
-	  TIM2 -> CCR1 = 100;//FL
-	  TIM2 -> CCR2 = 100;//FR
-	  TIM2 -> CCR3 = 0;//BL
-	  TIM2 -> CCR4 = 0;//BR
-
-	  Delay(2000);
-
-	  TIM2 -> CCR1 = 100;//FL
-	  TIM2 -> CCR2 = 0;//FR
-	  TIM2 -> CCR3 = 0;//BL
-	  TIM2 -> CCR4 = 0;//BR
-
-	  Delay(2000);
+		Delay(2000);
     }
 }
 

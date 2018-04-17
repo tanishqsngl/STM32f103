@@ -14,8 +14,8 @@ void emStop(void)
 		b = TIM2 -> CNT;
 		if(b >= 1500)
 		{
-			TIM3 -> CCR2 = 0;//FL
-			TIM3 -> CCR1 = 0;//FR
+			TIM3 -> CCR4 = 0;//FL
+			TIM3 -> CCR3 = 0;//FR
 		}
 	}
 	TIM2 -> CNT = 0;
@@ -145,10 +145,26 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_1;
 	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_0;
 
+	TIM4 -> CR1 |= TIM_CR1_CEN;
+	TIM4 -> CCER |= TIM_CCER_CC3E;
+	TIM4 -> CCER |= TIM_CCER_CC4E;
+
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC3M_1;
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC3M_0;
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC4M_2;
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC4M_1;
+	TIM4 -> CCMR2 |= TIM_CCMR2_OC4M_0;
+
 	uint16_t max = 65535;
 	uint16_t buffer = 32768;
 	uint16_t buffer1 = buffer + 0.25*buffer; //39321
 	uint16_t buffer2 = buffer - 0.25*buffer; //26214
+
+//	if(c1=='A')
+//	{
+//			motorCode1(x,y,z,w,c1);
+//	}
 
 	if(x<buffer1 && y<buffer1 && x>buffer2 && y>buffer2 && w==2)//centre
 	{
@@ -297,48 +313,10 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 	}
-	else if(c1=='m'||c1=='M'||c1=='c'||c1=='n'||c1=='N')
-	{
-//		if(c1=='c')
-//		{
-//			TIM4 -> CCR3 = servo1;
-//			TIM4 -> CCR4 = servo2;
-//		}
-//		if(c1=='m')
-//		{
-//			servo1++;
-//		}
-//		if(c1=='M')
-//		{
-//			servo1--;
-//		}
-//		if(c1=='m')
-//		{
-//			servo2++;
-//		}
-//		if(c1=='M')
-//		{
-//			servo2--;
-//		}
-//		TIM4 -> CCR3 = servo1;
-//		TIM4 -> CCR4 = servo2;
-	}
 }
 
 void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 {
-	TIM3 -> CR1 |= TIM_CR1_CEN;
-	TIM3 -> CCER |= TIM_CCER_CC1E;
-	TIM3 -> CCER |= TIM_CCER_CC2E;
-
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_2;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_1;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC1M_0;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_2;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_1;
-	TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_0;
-
-	uint16_t max = 65535;
 	uint16_t buffer = 32768;
 	uint16_t buffer1 = buffer + 0.25*buffer; //39321
 	uint16_t buffer2 = buffer - 0.25*buffer; //26214
@@ -363,6 +341,21 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	{
 		TIM3 -> CCR4 = ((buffer-y)*z)/25;//L
 		TIM3 -> CCR3 = ((buffer-y)*z)/25;//R
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
+	}
+
+	else if(y>buffer2 && y<buffer1 && x<buffer2)//Left
+	{
+		TIM3 -> CCR4 = 0;//FL
+		TIM3 -> CCR3 = ((buffer-x)*z)/25;//FR
+		GPIOB -> BSRR |= GPIO_BSRR_BR10;
+		GPIOB -> BSRR |= GPIO_BSRR_BR11;
+	}
+	else if(y>buffer2 && y<buffer1 && x>buffer1)//Right
+	{
+		TIM3 -> CCR4 = ((x-buffer)*z)/25;//FL
+		TIM3 -> CCR3 = 0;//FR
 		GPIOB -> BSRR |= GPIO_BSRR_BR10;
 		GPIOB -> BSRR |= GPIO_BSRR_BR11;
 	}
@@ -478,8 +471,7 @@ int main()
 
 			if(A=='a')
 				motorCode(x1, y1, z1, w1, c1);
-
-			if(A=='A')
+			else if(A=='A')
 				motorCode1(x1, y1, z1, w1, c1);
 
 			x1=0;

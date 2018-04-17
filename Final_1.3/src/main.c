@@ -1,7 +1,12 @@
 #include "stm32f10x.h"
-
 int servo1 = 1500;
 int servo2 = 1500;
+uint32_t x2 = 0;
+uint32_t y2 = 0;
+uint8_t z2 = 0;
+uint8_t w2 = 0;
+uint8_t c2=0;
+int cnt=0;
 
 void stopArm(void)
 {
@@ -63,7 +68,7 @@ void emStop1(void)
 	{
 		TIM2 -> CR1 |= TIM_CR1_CEN;
 		b = TIM2 -> CNT;
-		if(b >= 1500)
+		if(b >= 9500)
 		{
 			TIM3 -> CCR4 = 0;//FL
 			TIM3 -> CCR3 = 0;//FR
@@ -168,7 +173,7 @@ void GPIOSetup(void)
 	GPIOA -> CRL = 0xBB334333;
 	GPIOA -> CRH = 0x000334B3;
 	GPIOB -> CRL = 0x333000BB;
-	GPIOB -> CRH = 0xBB8833BB;
+	GPIOB -> CRH = 0xBB0033BB;
 	GPIOC -> CRH = 0x33300000;
 }
 
@@ -330,12 +335,6 @@ void Delay(int time)
 	time = time*10;
 	for (i=0;i<time;i++)
 		j++;
-}
-
-void us_delay(uint32_t j)
-{
-	for(uint32_t i=0;i<=(8*j);i++)
-	{}
 }
 
 void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
@@ -514,8 +513,7 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			GPIOB -> BSRR |= GPIO_BSRR_BS11;
 		}
 	}
-
-	else if(c1=='m'||c1=='M'||c1=='n'||c1=='N'||c1=='c')
+	else if(c1=='m'||c1=='M'||c1=='c'||c1=='n'||c1=='N'||c1=='A')
 	{
 		if(c1=='m')
 		{
@@ -523,31 +521,36 @@ void motorCode(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 			if(servo1>2500)
 				servo1=2500;
 		}
-		else if(c1=='M')
+		if(c1=='M')
 		{
 			servo1--;
 			if(servo1<400)
 				servo1=400;
 		}
-		else if(c1=='n')
+		if(c1=='n')
 		{
 			servo2++;
 			if(servo2>2500)
 				servo2=2500;
 		}
-		else if(c1=='N')
+		if(c1=='N')
 		{
 			servo2--;
 			if(servo2<400)
 				servo2=400;
 		}
-		else if(c1=='c')
+		if(c1=='c')
 		{
 			TIM4 -> CCR3 = servo1;
 			TIM4 -> CCR4 = servo2;
 		}
 		TIM4 -> CCR3 = servo1;
 		TIM4 -> CCR4 = servo2;
+		if(c1=='A')
+		{
+			motorCode1(x2,y2,z2,w2,c2);
+		}
+		x2=0,y2=0,z2=0,w2=0,c2=0;
 	}
 }
 
@@ -564,7 +567,7 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_1;
 	TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_0;
 
-	//uint16_t max = 65535;
+	uint16_t max = 65535;
 	uint16_t buffer = 32768;
 	uint16_t buffer1 = buffer + 0.25*buffer; //39321
 	uint16_t buffer2 = buffer - 0.25*buffer; //26214
@@ -598,100 +601,6 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	}
 }
 
-int ultrasonic(void)
-{
-	uint32_t a=0, flag1=0, a1=0, flag2=0;
-
-	GPIOA -> BSRR |= GPIO_BSRR_BS0;
-	us_delay(10);
-	GPIOA -> BRR |= GPIO_BRR_BR0;
-
-	while(!((GPIOB -> IDR)&(1<<12)))
-	{}
-
-	while(((GPIOB -> IDR)&(1<<12)))
-	{
-		a++;
-	}
-
-	if(a>=2000)
-		return 0;
-
-//	GPIOA -> BSRR |= GPIO_BSRR_BS1;
-//	us_delay(100);
-//	GPIOA -> BRR |= GPIO_BRR_BR1;
-//
-//	while(!((GPIOB -> IDR)&(1<<13)))
-//	{}
-//
-//	while((GPIOB -> IDR)&(1<<13))
-//	{
-//		a1++;
-//	}
-//
-	if(a>100 && a>1000)
-		flag1=1;
-	else
-		{
-			return 0;
-			flag1=0;
-		}
-
-
-//	else if(a1<=thr)
-//	{
-//		flag2=1;
-//	}
-
-	if(flag1==1)
-	{
-		//stop
-		motorCode(32768,32768,0,2,'c');
-		us_delay(20000);
-		//move back
-		motorCode(32768,0,10,2,'c');
-		us_delay(400000);
-		motorCode(32768,32768,0,2,'c');
-		us_delay(100000);
-		//rotate left
-		motorCode(32768,32768,10,1,'c');
-		us_delay(400000);
-		motorCode(32768,32768,0,2,'c');
-		us_delay(100000);
-		//forward
-		motorCode(32768,65535,10,2,'c');
-		us_delay(400000);
-		motorCode(32768,32768,0,2,'c');
-		us_delay(100000);
-		//stop
-		motorCode(32768,32768,13,2,'c');
-	}
-//
-//	else if(flag2==1)
-//	{
-//		motorCode(32768,32768,13,2,'c');
-//		us_delay(20000);
-//		//move back
-//		motorCode(32768,0,22,2,'c');
-//		us_delay(50000);
-//		motorCode(32768,32768,13,2,'c');
-//		us_delay(20000);
-//		//rotate left
-//		motorCode(32768,32768,22,1,'c');
-//		us_delay(50000);
-//		motorCode(32768,32768,13,2,'c');
-//		us_delay(20000);
-//		//forward
-//		motorCode(32768,65535,22,1,'c');
-//		us_delay(70000);
-//		motorCode(32768,32768,13,2,'c');
-//		us_delay(20000);
-//	}
-	flag1=0, a=0;
-	return 0;
-}
-
-
 void RoboticArm(uint32_t A)
 {
 	uint16_t sBase = 0;
@@ -705,6 +614,12 @@ void RoboticArm(uint32_t A)
 
 	if(A=='s' || A=='S')//s or S Swivel Base
 	{
+		for(int i=0;i<4;i++)
+		{
+			emStop();
+			sBase = sBase - 48;
+			sBase1 = sBase1*10 + sBase;
+		}
 		//Main code for swivel base
 		TIM1 -> CR1 |= TIM_CR1_CEN;
 		TIM1 -> CCER |= TIM_CCER_CC3NE;
@@ -920,112 +835,112 @@ int main()
 		USART1 -> CR1 |= USART_CR1_RE;
 		USART2 -> CR1 |= USART_CR1_RE;
 
+
 		if (count==0)
 		{
-//			emStop();
-//			A = USART1 -> DR;
-//
-//			if(A=='l')
-//				count=1;
-//
-//			if(A == 'a')
-//			{
-//				stopArm();
-//
-//				uint32_t x = 0;
-//				uint32_t y = 0;
-//				uint32_t x1 = 0;
-//				uint32_t y1 = 0;
-//				uint8_t z = 0;
-//				uint8_t z1 = 0;
-//				uint8_t w = 0;
-//				uint8_t w1 = 0;
-//				uint8_t c1=0;
-//
-//				for(int i=0;i<4;i++)
-//				{
-//					emStop();
-//					x = USART1 -> DR;
-//					x = x - 48;
-//					x1 = x + x1*10;
-//				}
-//				//x1 is output
-//
-//				for(int j=0;j<4;j++)
-//				{
-//					emStop();
-//					y = USART1 -> DR;
-//					y = y - 48;
-//					y1 = y + y1*10;
-//				}
-//				//y1 is output
-//
-//				for(int k=0;k<2;k++)
-//				{
-//					emStop();
-//					z = USART1 -> DR;
-//					z = z - 48;
-//					z1 = z + z1*10;
-//				}
-//
-//				emStop();
-//				w = USART1 -> DR;
-//				w = w - 48;
-//				w1 = w;
-//
-//				emStop();
-//				c1 = USART1 -> DR;
-//
-//				if(x1<1024 || x1>3072)
-//					x1=2048;
-//
-//				if(y1<1024 || y1>3072)
-//					y1=2048;
-//
-//				if(z1<13 || z1>38)
-//					z1=13;
-//
-//				if(w1!=1||w1!=2||w1!=3)
-//					w1=2;
-//
-//				y1 = y1 - 1024;
-//				z1 = z1 - 13;
-//				x1 = x1 - 1024;
-//
-//				if(x1==2047)
-//					x1=2048;
-//
-//				if(y1==1)
-//					y1=0;
-//
-//				x1 = x1*32;
-//				y1 = y1*32;
-//
-//				if(x1==65536)
-//					x1=65535;
-//
-//				if(y1==65536)
-//					y1=65535;
-//
-//				if(c1=='A')
-//					motorCode1(x1, y1, z1, w1, c1);
-//				else
-//					motorCode(x1, y1, z1, w1, c1);
-//
-//				x1=0,y1=0,z1=0,w1=0,c1=0;
-				ultrasonic();
-//			}
-//
-//			else if(A=='r')
-//			{
-//				TIM3 -> CCR4 = 0;//FL
-//				TIM3 -> CCR3 = 0;//FR
-//
-//				emStop();
-//				A = USART1 -> DR;
-//
-//				RoboticArm(A);
-//			}
+			emStop();
+			A = USART1 -> DR;
+
+			if(A=='l')
+				count=1;
+
+			if(A == 'a')
+			{
+				stopArm();
+
+				uint32_t x = 0;
+				uint32_t y = 0;
+				uint32_t x1 = 0;
+				uint32_t y1 = 0;
+				uint8_t z = 0;
+				uint8_t z1 = 0;
+				uint8_t w = 0;
+				uint8_t w1 = 0;
+				uint8_t c1=0;
+
+				for(int i=0;i<4;i++)
+				{
+					emStop();
+					x = USART1 -> DR;
+					x = x - 48;
+					x1 = x + x1*10;
+				}
+				//x1 is output
+
+				for(int j=0;j<4;j++)
+				{
+					emStop();
+					y = USART1 -> DR;
+					y = y - 48;
+					y1 = y + y1*10;
+				}
+				//y1 is output
+
+				for(int k=0;k<2;k++)
+				{
+					emStop();
+					z = USART1 -> DR;
+					z = z - 48;
+					z1 = z + z1*10;
+				}
+
+				emStop();
+				w = USART1 -> DR;
+				w = w - 48;
+				w1 = w;
+
+				emStop();
+				c1 = USART1 -> DR;
+
+				y1 = y1 - 1024;
+				z1 = z1 - 13;
+				x1 = x1 - 1024;
+
+				if(x1==2047)
+					x1=2048;
+
+				if(y1==1)
+					y1=0;
+
+				x1 = x1*32;
+				y1 = y1*32;
+
+				if(x1==65536)
+					x1=65535;
+
+				if(y1==65536)
+					y1=65535;
+
+				x2=x1;
+				y2=y1;
+				z2=z1;
+				w2=w1;
+				c2=c1;
+
+				motorCode(x1, y1, z1, w1, c1);
+
+				x1=0,y1=0,z1=0,w1=0,c1=0;
+			}
+
+			else if(A=='r')
+			{
+				TIM3 -> CCR4 = 0;//FL
+				TIM3 -> CCR3 = 0;//FR
+
+				emStop();
+				A = USART1 -> DR;
+
+				if(A=='c')
+					cnt++;
+				else
+					cnt=0;
+
+				if(cnt>1 || cnt==0)
+					RoboticArm(A);
+
+				if(cnt>2)
+					cnt=2;
+			}
 		}
 
 		if(count==1)
