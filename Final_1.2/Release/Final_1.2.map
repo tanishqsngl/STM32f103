@@ -876,13 +876,13 @@ END GROUP
  .debug_str     0x0000000000000b07      0x262 ./src/main.o
                                         0x44f (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x14bf
+.debug_loc      0x0000000000000000     0x14ca
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0x21 ./system/src/newlib/_exit.o
  .debug_loc     0x0000000000000021      0x148 ./system/src/newlib/_startup.o
  .debug_loc     0x0000000000000169       0x63 ./system/src/newlib/_syscalls.o
  .debug_loc     0x00000000000001cc       0xb1 ./system/src/cmsis/system_stm32f10x.o
- .debug_loc     0x000000000000027d     0x1242 ./src/main.o
+ .debug_loc     0x000000000000027d     0x124d ./src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)

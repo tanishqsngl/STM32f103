@@ -271,9 +271,10 @@ void RoboticArm(uint32_t A)
 
 	if(A=='s' || A=='S')//s or S Swivel Base
 	{
-		for(int i=0;i<4;i++)
+		for(int i=0;i<2;i++)
 		{
 			emStop();
+			sBase = USART1 -> DR;
 			sBase = sBase - 48;
 			sBase1 = sBase1*10 + sBase;
 		}
@@ -284,14 +285,6 @@ void RoboticArm(uint32_t A)
 		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_2;
 		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_1;
 		TIM1 -> CCMR1 |= TIM_CCMR1_OC2M_0;
-
-		for(int i=0;i<2;i++)
-		{
-			emStop();
-			sBase = USART1-> DR;
-			sBase = sBase - 48;
-			sBase1 = sBase1*10 + sBase;
-		}
 
 		sBase1 = sBase1-12;
 		sBase1 = sBase1*1260;
@@ -364,8 +357,8 @@ void RoboticArm(uint32_t A)
 	{
 		if(A=='b')//b forward
 		{
-			GPIOB -> BSRR |= GPIO_BSRR_BR5;
-			GPIOB -> BSRR |= GPIO_BSRR_BS6;
+			GPIOB -> BSRR |= GPIO_BSRR_BS5;
+			GPIOB -> BSRR |= GPIO_BSRR_BR6;
 		}
 		else if(A=='B')//B backward
 		{
@@ -410,18 +403,24 @@ void RoboticArm(uint32_t A)
 	{
 		if(A=='q')//forward g
 		{
-			GPIOB -> BSRR |= GPIO_BSRR_BR7;
+			GPIOB -> BSRR |= GPIO_BSRR_BS7;
 			GPIOB -> BSRR |= GPIO_BSRR_BS8;
 		}
 		else if(A=='Q')//Backward G
 		{
 			GPIOB -> BSRR |= GPIO_BSRR_BS7;
-			GPIOB -> BSRR |= GPIO_BSRR_BS8;
+			GPIOB -> BSRR |= GPIO_BSRR_BR8;
 		}
 	}
 
 	if(A=='p'||A=='P')
 	{
+		TIM3 -> CR1 |= TIM_CR1_CEN;
+		TIM3 -> CCER |= TIM_CCER_CC2E;
+		TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_2;
+		TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_1;
+		TIM3 -> CCMR1 |= TIM_CCMR1_OC2M_0;
+
 		if(A=='p')
 		{
 			servo3++;
@@ -471,7 +470,8 @@ int main()
 
 	UARTSetup();
 
-	uint16_t A = 0;
+	uint32_t A = 0;
+	uint32_t c1 = 0;
 
 	while(1)
 	{
@@ -485,7 +485,6 @@ int main()
 			stopArm();
 
 			uint32_t x = 0;
-			uint32_t c1=0;
 
 			for(int i=0;i<11;i++)
 			{
@@ -495,6 +494,17 @@ int main()
 
 			emStop();
 			c1 = USART1 -> DR;
+
+			TIM3 -> CR1 |= TIM_CR1_CEN;
+			TIM3 -> CCER |= TIM_CCER_CC3E;
+			TIM3 -> CCER |= TIM_CCER_CC4E;
+
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_2;
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_1;
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC3M_0;
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_2;
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_1;
+			TIM3 -> CCMR2 |= TIM_CCMR2_OC4M_0;
 
 			if(c1=='m'||c1=='M'||c1=='c'||c1=='n'||c1=='N')
 			{
@@ -530,13 +540,14 @@ int main()
 				TIM3 -> CCR3 = servo1;
 				TIM3 -> CCR4 = servo2;
 			}
-			else if(A=='r')
-			{
-				emStop();
-				A = USART1 -> DR;
+			c1=0;
+		}
+		else if(A=='r')
+		{
+			emStop();
+			A = USART1 -> DR;
 
-				RoboticArm(A);
-			}
+			RoboticArm(A);
 		}
 	}
 }

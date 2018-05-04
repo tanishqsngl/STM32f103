@@ -361,7 +361,7 @@ END GROUP
                 0x0000000020004c00                __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                        PROVIDE (_Main_Stack_Limit, __Main_Stack_Limit)
                 0x0000000000000100                _Minimum_Stack_Size = 0x100
-                0x000000002000003c                PROVIDE (_Heap_Begin, _end_noinit)
+                0x0000000020000034                PROVIDE (_Heap_Begin, _end_noinit)
                 0x0000000020004c00                PROVIDE (_Heap_Limit, (__stack - __Main_Stack_Size))
 
 .isr_vector     0x0000000008000000      0x22a
@@ -483,16 +483,16 @@ END GROUP
 
 .inits          0x000000000800022c       0x28
                 0x000000000800022c                __data_regions_array_start = .
-                0x000000000800022c        0x4 LONG 0x8001788 LOADADDR (.data)
+                0x000000000800022c        0x4 LONG 0x8001824 LOADADDR (.data)
                 0x0000000008000230        0x4 LONG 0x20000000 ADDR (.data)
                 0x0000000008000234        0x4 LONG 0x20000024 (ADDR (.data) + SIZEOF (.data))
-                0x0000000008000238        0x4 LONG 0x8001788 LOADADDR (.data_CCMRAM)
+                0x0000000008000238        0x4 LONG 0x8001824 LOADADDR (.data_CCMRAM)
                 0x000000000800023c        0x4 LONG 0x0 ADDR (.data_CCMRAM)
                 0x0000000008000240        0x4 LONG 0x0 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x0000000008000244                __data_regions_array_end = .
                 0x0000000008000244                __bss_regions_array_start = .
                 0x0000000008000244        0x4 LONG 0x20000024 ADDR (.bss)
-                0x0000000008000248        0x4 LONG 0x2000003c (ADDR (.bss) + SIZEOF (.bss))
+                0x0000000008000248        0x4 LONG 0x20000034 (ADDR (.bss) + SIZEOF (.bss))
                 0x000000000800024c        0x4 LONG 0x0 ADDR (.bss_CCMRAM)
                 0x0000000008000250        0x4 LONG 0x0 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x0000000008000254                __bss_regions_array_end = .
@@ -518,7 +518,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x0000000008000254     0x1534
+.text           0x0000000008000254     0x15d0
  *(.text .text.*)
  .text._exit    0x0000000008000254        0x6 ./system/src/newlib/_exit.o
                 0x0000000008000254                _exit
@@ -579,51 +579,57 @@ END GROUP
  .text.motorCode
                 0x0000000008000d14      0x4dc ./src/main.o
                 0x0000000008000d14                motorCode
+ .text.us_delay
+                0x00000000080011f0        0xc ./src/main.o
+                0x00000000080011f0                us_delay
+ .text.ultrasonic
+                0x00000000080011fc       0x44 ./src/main.o
+                0x00000000080011fc                ultrasonic
  .text.RoboticArm
-                0x00000000080011f0      0x2b8 ./src/main.o
-                0x00000000080011f0                RoboticArm
+                0x0000000008001240      0x2b8 ./src/main.o
+                0x0000000008001240                RoboticArm
  .text.startup.main
-                0x00000000080014a8      0x2e0 ./src/main.o
-                0x00000000080014a8                main
+                0x00000000080014f8      0x32c ./src/main.o
+                0x00000000080014f8                main
  *(.rodata .rodata.* .constdata .constdata.*)
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x0000000008001788        0x0 linker stubs
+ .glue_7        0x0000000008001824        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0000000008001788        0x0 linker stubs
+ .glue_7t       0x0000000008001824        0x0 linker stubs
 
-.vfp11_veneer   0x0000000008001788        0x0
- .vfp11_veneer  0x0000000008001788        0x0 linker stubs
+.vfp11_veneer   0x0000000008001824        0x0
+ .vfp11_veneer  0x0000000008001824        0x0 linker stubs
 
-.v4_bx          0x0000000008001788        0x0
- .v4_bx         0x0000000008001788        0x0 linker stubs
+.v4_bx          0x0000000008001824        0x0
+ .v4_bx         0x0000000008001824        0x0 linker stubs
 
-.iplt           0x0000000008001788        0x0
- .iplt          0x0000000008001788        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.iplt           0x0000000008001824        0x0
+ .iplt          0x0000000008001824        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
-.rel.dyn        0x0000000008001788        0x0
- .rel.iplt      0x0000000008001788        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.rel.dyn        0x0000000008001824        0x0
+ .rel.iplt      0x0000000008001824        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000008001788                . = ALIGN (0x4)
-                0x0000000008001788                __exidx_start = .
+                0x0000000008001824                . = ALIGN (0x4)
+                0x0000000008001824                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000008001788                __exidx_end = .
-                0x0000000008001788                . = ALIGN (0x4)
-                0x0000000008001788                _etext = .
-                0x0000000008001788                __etext = .
+                0x0000000008001824                __exidx_end = .
+                0x0000000008001824                . = ALIGN (0x4)
+                0x0000000008001824                _etext = .
+                0x0000000008001824                __etext = .
 
-.data_CCMRAM    0x0000000000000000        0x0 load address 0x0000000008001788
+.data_CCMRAM    0x0000000000000000        0x0 load address 0x0000000008001824
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x0000000000000000                . = ALIGN (0x4)
-                0x0000000008001788                _sidata = LOADADDR (.data)
+                0x0000000008001824                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x24 load address 0x0000000008001788
+.data           0x0000000020000000       0x24 load address 0x0000000008001824
  FILL mask 0xff
                 0x0000000020000000                _sdata = .
                 0x0000000020000000                __data_start__ = .
@@ -646,13 +652,13 @@ END GROUP
                 0x0000000020000024                _edata = .
                 0x0000000020000024                __data_end__ = .
 
-.igot.plt       0x0000000020000024        0x0 load address 0x00000000080017ac
+.igot.plt       0x0000000020000024        0x0 load address 0x0000000008001848
  .igot.plt      0x0000000020000024        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .bss_CCMRAM     0x0000000000000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x0000000020000024       0x18
+.bss            0x0000000020000024       0x10
                 0x0000000020000024                __bss_start__ = .
                 0x0000000020000024                _sbss = .
  *(.bss_begin .bss_begin.*)
@@ -661,41 +667,38 @@ END GROUP
                 0x0000000020000024        0x1 ./system/src/newlib/_syscalls.o
  .bss.c2        0x0000000020000025        0x1 ./src/main.o
                 0x0000000020000025                c2
- *fill*         0x0000000020000026        0x2 
- .bss.cnt       0x0000000020000028        0x4 ./src/main.o
-                0x0000000020000028                cnt
- .bss.w2        0x000000002000002c        0x1 ./src/main.o
-                0x000000002000002c                w2
- *fill*         0x000000002000002d        0x3 
- .bss.x2        0x0000000020000030        0x4 ./src/main.o
-                0x0000000020000030                x2
- .bss.y2        0x0000000020000034        0x4 ./src/main.o
-                0x0000000020000034                y2
- .bss.z2        0x0000000020000038        0x1 ./src/main.o
-                0x0000000020000038                z2
+ .bss.w2        0x0000000020000026        0x1 ./src/main.o
+                0x0000000020000026                w2
+ *fill*         0x0000000020000027        0x1 
+ .bss.x2        0x0000000020000028        0x4 ./src/main.o
+                0x0000000020000028                x2
+ .bss.y2        0x000000002000002c        0x4 ./src/main.o
+                0x000000002000002c                y2
+ .bss.z2        0x0000000020000030        0x1 ./src/main.o
+                0x0000000020000030                z2
  *(COMMON)
  *(.bss_end .bss_end.*)
-                0x000000002000003c                . = ALIGN (0x4)
- *fill*         0x0000000020000039        0x3 
-                0x000000002000003c                __bss_end__ = .
-                0x000000002000003c                _ebss = .
+                0x0000000020000034                . = ALIGN (0x4)
+ *fill*         0x0000000020000031        0x3 
+                0x0000000020000034                __bss_end__ = .
+                0x0000000020000034                _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x000000002000003c        0x0
-                0x000000002000003c                _noinit = .
+.noinit         0x0000000020000034        0x0
+                0x0000000020000034                _noinit = .
  *(.noinit .noinit.*)
-                0x000000002000003c                . = ALIGN (0x4)
-                0x000000002000003c                _end_noinit = .
+                0x0000000020000034                . = ALIGN (0x4)
+                0x0000000020000034                _end_noinit = .
                 [!provide]                        PROVIDE (end, _end_noinit)
                 [!provide]                        PROVIDE (_end, _end_noinit)
                 [!provide]                        PROVIDE (__end, _end_noinit)
                 [!provide]                        PROVIDE (__end__, _end_noinit)
 
-._check_stack   0x000000002000003c      0x100
-                0x000000002000013c                . = (. + _Minimum_Stack_Size)
- *fill*         0x000000002000003c      0x100 
+._check_stack   0x0000000020000034      0x100
+                0x0000000020000134                . = (. + _Minimum_Stack_Size)
+ *fill*         0x0000000020000034      0x100 
 
 .b1text
  *(.b1text)
@@ -786,7 +789,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x248
+.debug_aranges  0x0000000000000000      0x258
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x28 ./system/src/newlib/_exit.o
@@ -805,12 +808,12 @@ END GROUP
  .debug_aranges
                 0x0000000000000188       0x20 ./system/src/cmsis/vectors_stm32f10x.o
  .debug_aranges
-                0x00000000000001a8       0xa0 ./src/main.o
+                0x00000000000001a8       0xb0 ./src/main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x3dc8
+.debug_info     0x0000000000000000     0x3e45
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x967 ./system/src/newlib/_exit.o
  .debug_info    0x0000000000000967      0x3d1 ./system/src/newlib/_startup.o
@@ -820,9 +823,9 @@ END GROUP
  .debug_info    0x0000000000001cd6      0xad2 ./system/src/cortexm/exception_handlers.o
  .debug_info    0x00000000000027a8      0x49f ./system/src/cmsis/system_stm32f10x.o
  .debug_info    0x0000000000002c47       0xcd ./system/src/cmsis/vectors_stm32f10x.o
- .debug_info    0x0000000000002d14     0x10b4 ./src/main.o
+ .debug_info    0x0000000000002d14     0x1131 ./src/main.o
 
-.debug_abbrev   0x0000000000000000      0xeb2
+.debug_abbrev   0x0000000000000000      0xef5
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x210 ./system/src/newlib/_exit.o
  .debug_abbrev  0x0000000000000210      0x173 ./system/src/newlib/_startup.o
@@ -832,9 +835,9 @@ END GROUP
  .debug_abbrev  0x00000000000007b6      0x1fe ./system/src/cortexm/exception_handlers.o
  .debug_abbrev  0x00000000000009b4      0x18c ./system/src/cmsis/system_stm32f10x.o
  .debug_abbrev  0x0000000000000b40       0x9a ./system/src/cmsis/vectors_stm32f10x.o
- .debug_abbrev  0x0000000000000bda      0x2d8 ./src/main.o
+ .debug_abbrev  0x0000000000000bda      0x31b ./src/main.o
 
-.debug_line     0x0000000000000000     0x12d6
+.debug_line     0x0000000000000000     0x1364
  *(.debug_line)
  .debug_line    0x0000000000000000      0x1ca ./system/src/newlib/_exit.o
  .debug_line    0x00000000000001ca      0x10d ./system/src/newlib/_startup.o
@@ -844,9 +847,9 @@ END GROUP
  .debug_line    0x00000000000006fc      0x1f0 ./system/src/cortexm/exception_handlers.o
  .debug_line    0x00000000000008ec      0x16b ./system/src/cmsis/system_stm32f10x.o
  .debug_line    0x0000000000000a57       0x58 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_line    0x0000000000000aaf      0x827 ./src/main.o
+ .debug_line    0x0000000000000aaf      0x8b5 ./src/main.o
 
-.debug_frame    0x0000000000000000      0x47c
+.debug_frame    0x0000000000000000      0x4a4
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0x40 ./system/src/newlib/_exit.o
  .debug_frame   0x0000000000000040       0x80 ./system/src/newlib/_startup.o
@@ -856,9 +859,9 @@ END GROUP
  .debug_frame   0x0000000000000168       0xe0 ./system/src/cortexm/exception_handlers.o
  .debug_frame   0x0000000000000248       0x3c ./system/src/cmsis/system_stm32f10x.o
  .debug_frame   0x0000000000000284       0x20 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_frame   0x00000000000002a4      0x1d8 ./src/main.o
+ .debug_frame   0x00000000000002a4      0x200 ./src/main.o
 
-.debug_str      0x0000000000000000      0xd3d
+.debug_str      0x0000000000000000      0xd5d
  *(.debug_str)
  .debug_str     0x0000000000000000      0x57e ./system/src/newlib/_exit.o
                                         0x5ef (size before relaxing)
@@ -876,16 +879,16 @@ END GROUP
                                         0x329 (size before relaxing)
  .debug_str     0x0000000000000ab1       0x57 ./system/src/cmsis/vectors_stm32f10x.o
                                         0x1d8 (size before relaxing)
- .debug_str     0x0000000000000b08      0x235 ./src/main.o
-                                        0x44f (size before relaxing)
+ .debug_str     0x0000000000000b08      0x255 ./src/main.o
+                                        0x46f (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x14bf
+.debug_loc      0x0000000000000000     0x15cb
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0x21 ./system/src/newlib/_exit.o
  .debug_loc     0x0000000000000021      0x148 ./system/src/newlib/_startup.o
  .debug_loc     0x0000000000000169       0x63 ./system/src/newlib/_syscalls.o
  .debug_loc     0x00000000000001cc       0xb1 ./system/src/cmsis/system_stm32f10x.o
- .debug_loc     0x000000000000027d     0x1242 ./src/main.o
+ .debug_loc     0x000000000000027d     0x134e ./src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -903,7 +906,7 @@ END GROUP
  *(.debug_varnames)
 OUTPUT(Final_1.3.elf elf32-littlearm)
 
-.debug_ranges   0x0000000000000000      0x370
+.debug_ranges   0x0000000000000000      0x3a0
  .debug_ranges  0x0000000000000000       0x18 ./system/src/newlib/_exit.o
  .debug_ranges  0x0000000000000018       0xa0 ./system/src/newlib/_startup.o
  .debug_ranges  0x00000000000000b8       0x20 ./system/src/newlib/_syscalls.o
@@ -912,4 +915,4 @@ OUTPUT(Final_1.3.elf elf32-littlearm)
  .debug_ranges  0x0000000000000100       0x70 ./system/src/cortexm/exception_handlers.o
  .debug_ranges  0x0000000000000170       0x30 ./system/src/cmsis/system_stm32f10x.o
  .debug_ranges  0x00000000000001a0       0x10 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_ranges  0x00000000000001b0      0x1c0 ./src/main.o
+ .debug_ranges  0x00000000000001b0      0x1f0 ./src/main.o

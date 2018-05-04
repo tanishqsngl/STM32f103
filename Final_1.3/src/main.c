@@ -6,7 +6,6 @@ uint32_t y2 = 0;
 uint8_t z2 = 0;
 uint8_t w2 = 0;
 uint8_t c2=0;
-int cnt=0;
 
 void stopArm(void)
 {
@@ -172,7 +171,7 @@ void GPIOSetup(void)
 {
 	GPIOA -> CRL = 0xBB334333;
 	GPIOA -> CRH = 0x000334B3;
-	GPIOB -> CRL = 0x333000BB;
+	GPIOB -> CRL = 0x334400BB;
 	GPIOB -> CRH = 0xBB0033BB;
 	GPIOC -> CRH = 0x33300000;
 }
@@ -601,6 +600,61 @@ void motorCode1(uint16_t x, uint16_t y, uint16_t z, uint16_t w, uint16_t c1)
 	}
 }
 
+int ultrasonic(uint16_t th)
+{
+	uint32_t a=0, b=0, flag1=0, flag2=0;
+
+	GPIOA -> BSRR |= GPIO_BSRR_BS0;
+	us_delay(100);
+	GPIOA -> BRR |= GPIO_BRR_BR0;
+
+	while(!((GPIOB -> IDR)&(1<<12)))
+	{}
+
+	while(((GPIOB -> IDR)&(1<<12)))
+	{
+		a++;
+	}
+
+	if(a<=th)
+	{
+		flag1=1;
+	}
+	a=0;
+
+//	GPIOA -> BSRR |= GPIO_BSRR_BS1;
+//	us_delay(100);
+//	GPIOA -> BRR |= GPIO_BRR_BR1;
+//
+//	while(!((GPIOB -> IDR)&(1<<13)))
+//	{}
+//
+//	while(((GPIOB -> IDR)&(1<<13)))
+//	{
+//		b++;
+//	}
+//
+//	if(b<=th)
+//	{
+//		flag2=1;
+//	}
+//	b=0;
+
+	if(flag1==1)
+		return 1;
+	else if(flag2==1)
+		return 2;
+	else
+		return 0;
+}
+
+void us_delay(uint32_t j)
+{
+	for(uint32_t i=0;i<=(8*j);i++)
+	{}
+}
+
+
 void RoboticArm(uint32_t A)
 {
 	uint16_t sBase = 0;
@@ -834,7 +888,7 @@ int main()
 	{
 		USART1 -> CR1 |= USART_CR1_RE;
 		USART2 -> CR1 |= USART_CR1_RE;
-
+		USART1 -> CR1 |= USART_CR1_TE;
 
 		if (count==0)
 		{
@@ -857,6 +911,7 @@ int main()
 				uint8_t w = 0;
 				uint8_t w1 = 0;
 				uint8_t c1=0;
+				uint8_t a=0;
 
 				for(int i=0;i<4;i++)
 				{
@@ -919,6 +974,21 @@ int main()
 
 				motorCode(x1, y1, z1, w1, c1);
 
+				a = ultrasonic(15000);
+
+				if(a==1)
+				{
+					USART1 -> DR = '1';
+				}
+				else if(a==2)
+				{
+					USART1 -> DR = '2';
+				}
+				else if(a==0)
+				{
+					USART1 -> DR = '0';
+				}
+
 				x1=0,y1=0,z1=0,w1=0,c1=0;
 			}
 
@@ -930,16 +1000,7 @@ int main()
 				emStop();
 				A = USART1 -> DR;
 
-				if(A=='c')
-					cnt++;
-				else
-					cnt=0;
-
-				if(cnt>1 || cnt==0)
-					RoboticArm(A);
-
-				if(cnt>2)
-					cnt=2;
+				RoboticArm(A);
 			}
 		}
 
@@ -964,6 +1025,8 @@ int main()
 				uint8_t w = 0;
 				uint8_t w1 = 0;
 				uint8_t c1=0;
+				uint8_t c2=0;
+				uint8_t a=0;
 
 				for(int i=0;i<4;i++)
 				{
@@ -999,6 +1062,11 @@ int main()
 				emStop1();
 				c1 = USART2 -> DR;
 
+				emStop1();
+				c2 = USART2 -> DR;
+
+
+
 				y1 = y1 - 1024;
 				z1 = z1 - 13;
 				x1 = x1 - 1024;
@@ -1018,7 +1086,43 @@ int main()
 				if(y1==65536)
 					y1=65535;
 
+				if(c1=='f')
+				{
+					TIM1 -> CCR2 = 0;
+					TIM1 -> CCR3 = 32768;
+				}
+				else if(c1=='F')
+				{
+					TIM1 -> CCR2 = 32768;
+					TIM1 -> CCR3 = 32768;
+				}
+				else if(c2=='j')
+				{
+					TIM3 -> CCR1 = 0;
+					TIM3 -> CCR2 = 32768;
+				}
+				else if(c2=='J')
+				{
+					TIM3 -> CCR1 = 32768;
+					TIM3 -> CCR2 = 32768;
+				}
+
 				motorCode(x1, y1, z1, w1, c1);
+
+//				a = ultrasonic(15000);
+//
+//				if(a==1)
+//				{
+//					USART1 -> DR = '1';
+//				}
+//				else if(a==2)
+//				{
+//					USART1 -> DR = '2';
+//				}
+//				else if(a==0)
+//				{
+//					USART1 -> DR = '0';
+//				}
 
 				x1=0,y1=0,z1=0,w1=0,c1=0;
 			}

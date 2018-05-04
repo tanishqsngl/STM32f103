@@ -826,7 +826,7 @@ int main()
 	UARTSetup1();
 
 	uint16_t A = 0;
-	uint16_t count = 0;
+	uint16_t count = 1;
 	uint16_t B = 0;
 
 	while(1)

@@ -290,18 +290,6 @@ Discarded input sections
  .data          0x0000000000000000        0x0 ./src/main.o
  .bss           0x0000000000000000        0x0 ./src/main.o
  .text.map      0x0000000000000000       0x18 ./src/main.o
- .text.Delay    0x0000000000000000       0x20 ./src/main.o
- .text.DCServoF
-                0x0000000000000000       0xac ./src/main.o
- .text.DCServoB
-                0x0000000000000000       0xac ./src/main.o
- .text.DCServoF1
-                0x0000000000000000       0xac ./src/main.o
- .text.DCServoB1
-                0x0000000000000000       0xac ./src/main.o
- .text.RoboticArm
-                0x0000000000000000      0x278 ./src/main.o
- .data.servo3   0x0000000000000000        0x4 ./src/main.o
  .text          0x0000000000000000        0x0 /home/tanishq/Downloads/gcc-arm-none-eabi-6-2017-q1-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/libg_nano.a(lib_a-errno.o)
  .data          0x0000000000000000        0x0 /home/tanishq/Downloads/gcc-arm-none-eabi-6-2017-q1-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/libg_nano.a(lib_a-errno.o)
  .bss           0x0000000000000000        0x0 /home/tanishq/Downloads/gcc-arm-none-eabi-6-2017-q1-update/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/libg_nano.a(lib_a-errno.o)
@@ -373,7 +361,7 @@ END GROUP
                 0x0000000020004c00                __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                        PROVIDE (_Main_Stack_Limit, __Main_Stack_Limit)
                 0x0000000000000100                _Minimum_Stack_Size = 0x100
-                0x0000000020000028                PROVIDE (_Heap_Begin, _end_noinit)
+                0x000000002000002c                PROVIDE (_Heap_Begin, _end_noinit)
                 0x0000000020004c00                PROVIDE (_Heap_Limit, (__stack - __Main_Stack_Size))
 
 .isr_vector     0x0000000008000000      0x22a
@@ -495,16 +483,16 @@ END GROUP
 
 .inits          0x000000000800022c       0x28
                 0x000000000800022c                __data_regions_array_start = .
-                0x000000000800022c        0x4 LONG 0x8000894 LOADADDR (.data)
+                0x000000000800022c        0x4 LONG 0x8000e60 LOADADDR (.data)
                 0x0000000008000230        0x4 LONG 0x20000000 ADDR (.data)
-                0x0000000008000234        0x4 LONG 0x20000024 (ADDR (.data) + SIZEOF (.data))
-                0x0000000008000238        0x4 LONG 0x8000894 LOADADDR (.data_CCMRAM)
+                0x0000000008000234        0x4 LONG 0x20000028 (ADDR (.data) + SIZEOF (.data))
+                0x0000000008000238        0x4 LONG 0x8000e60 LOADADDR (.data_CCMRAM)
                 0x000000000800023c        0x4 LONG 0x0 ADDR (.data_CCMRAM)
                 0x0000000008000240        0x4 LONG 0x0 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x0000000008000244                __data_regions_array_end = .
                 0x0000000008000244                __bss_regions_array_start = .
-                0x0000000008000244        0x4 LONG 0x20000024 ADDR (.bss)
-                0x0000000008000248        0x4 LONG 0x20000028 (ADDR (.bss) + SIZEOF (.bss))
+                0x0000000008000244        0x4 LONG 0x20000028 ADDR (.bss)
+                0x0000000008000248        0x4 LONG 0x2000002c (ADDR (.bss) + SIZEOF (.bss))
                 0x000000000800024c        0x4 LONG 0x0 ADDR (.bss_CCMRAM)
                 0x0000000008000250        0x4 LONG 0x0 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x0000000008000254                __bss_regions_array_end = .
@@ -530,7 +518,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x0000000008000254      0x640
+.text           0x0000000008000254      0xc0c
  *(.text .text.*)
  .text._exit    0x0000000008000254        0x6 ./system/src/newlib/_exit.o
                 0x0000000008000254                _exit
@@ -553,61 +541,78 @@ END GROUP
  .text.SystemCoreClockUpdate
                 0x000000000800039c       0x5c ./system/src/cmsis/system_stm32f10x.o
                 0x000000000800039c                SystemCoreClockUpdate
- .text.stopArm  0x00000000080003f8       0xa8 ./src/main.o
+ .text.stopArm  0x00000000080003f8       0xb4 ./src/main.o
                 0x00000000080003f8                stopArm
- .text.emStop   0x00000000080004a0       0x5c ./src/main.o
-                0x00000000080004a0                emStop
+ .text.emStop   0x00000000080004ac       0x5c ./src/main.o
+                0x00000000080004ac                emStop
  .text.timerSetup
-                0x00000000080004fc      0x1e8 ./src/main.o
-                0x00000000080004fc                timerSetup
+                0x0000000008000508      0x1e4 ./src/main.o
+                0x0000000008000508                timerSetup
  .text.GPIOSetup
-                0x00000000080006e4       0x34 ./src/main.o
-                0x00000000080006e4                GPIOSetup
+                0x00000000080006ec       0x34 ./src/main.o
+                0x00000000080006ec                GPIOSetup
  .text.UARTSetup
-                0x0000000008000718       0x44 ./src/main.o
-                0x0000000008000718                UARTSetup
+                0x0000000008000720       0x44 ./src/main.o
+                0x0000000008000720                UARTSetup
+ .text.Delay    0x0000000008000764       0x20 ./src/main.o
+                0x0000000008000764                Delay
+ .text.DCServoF
+                0x0000000008000784       0xac ./src/main.o
+                0x0000000008000784                DCServoF
+ .text.DCServoB
+                0x0000000008000830       0xac ./src/main.o
+                0x0000000008000830                DCServoB
+ .text.DCServoF1
+                0x00000000080008dc       0xac ./src/main.o
+                0x00000000080008dc                DCServoF1
+ .text.DCServoB1
+                0x0000000008000988       0xac ./src/main.o
+                0x0000000008000988                DCServoB1
+ .text.RoboticArm
+                0x0000000008000a34      0x284 ./src/main.o
+                0x0000000008000a34                RoboticArm
  .text.startup.main
-                0x000000000800075c      0x138 ./src/main.o
-                0x000000000800075c                main
+                0x0000000008000cb8      0x1a8 ./src/main.o
+                0x0000000008000cb8                main
  *(.rodata .rodata.* .constdata .constdata.*)
  *(vtable)
  *(.eh_frame*)
  *(.glue_7)
- .glue_7        0x0000000008000894        0x0 linker stubs
+ .glue_7        0x0000000008000e60        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0000000008000894        0x0 linker stubs
+ .glue_7t       0x0000000008000e60        0x0 linker stubs
 
-.vfp11_veneer   0x0000000008000894        0x0
- .vfp11_veneer  0x0000000008000894        0x0 linker stubs
+.vfp11_veneer   0x0000000008000e60        0x0
+ .vfp11_veneer  0x0000000008000e60        0x0 linker stubs
 
-.v4_bx          0x0000000008000894        0x0
- .v4_bx         0x0000000008000894        0x0 linker stubs
+.v4_bx          0x0000000008000e60        0x0
+ .v4_bx         0x0000000008000e60        0x0 linker stubs
 
-.iplt           0x0000000008000894        0x0
- .iplt          0x0000000008000894        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.iplt           0x0000000008000e60        0x0
+ .iplt          0x0000000008000e60        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
-.rel.dyn        0x0000000008000894        0x0
- .rel.iplt      0x0000000008000894        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.rel.dyn        0x0000000008000e60        0x0
+ .rel.iplt      0x0000000008000e60        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000008000894                . = ALIGN (0x4)
-                0x0000000008000894                __exidx_start = .
+                0x0000000008000e60                . = ALIGN (0x4)
+                0x0000000008000e60                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000008000894                __exidx_end = .
-                0x0000000008000894                . = ALIGN (0x4)
-                0x0000000008000894                _etext = .
-                0x0000000008000894                __etext = .
+                0x0000000008000e60                __exidx_end = .
+                0x0000000008000e60                . = ALIGN (0x4)
+                0x0000000008000e60                _etext = .
+                0x0000000008000e60                __etext = .
 
-.data_CCMRAM    0x0000000000000000        0x0 load address 0x0000000008000894
+.data_CCMRAM    0x0000000000000000        0x0 load address 0x0000000008000e60
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x0000000000000000                . = ALIGN (0x4)
-                0x0000000008000894                _sidata = LOADADDR (.data)
+                0x0000000008000e60                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x24 load address 0x0000000008000894
+.data           0x0000000020000000       0x28 load address 0x0000000008000e60
  FILL mask 0xff
                 0x0000000020000000                _sdata = .
                 0x0000000020000000                __data_start__ = .
@@ -625,47 +630,49 @@ END GROUP
                 0x000000002000001c                servo1
  .data.servo2   0x0000000020000020        0x4 ./src/main.o
                 0x0000000020000020                servo2
+ .data.servo3   0x0000000020000024        0x4 ./src/main.o
+                0x0000000020000024                servo3
  *(.data_end .data_end.*)
-                0x0000000020000024                . = ALIGN (0x4)
-                0x0000000020000024                _edata = .
-                0x0000000020000024                __data_end__ = .
+                0x0000000020000028                . = ALIGN (0x4)
+                0x0000000020000028                _edata = .
+                0x0000000020000028                __data_end__ = .
 
-.igot.plt       0x0000000020000024        0x0 load address 0x00000000080008b8
- .igot.plt      0x0000000020000024        0x0 ./system/src/stm32f1-stdperiph/misc.o
+.igot.plt       0x0000000020000028        0x0 load address 0x0000000008000e88
+ .igot.plt      0x0000000020000028        0x0 ./system/src/stm32f1-stdperiph/misc.o
 
 .bss_CCMRAM     0x0000000000000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x0000000020000024        0x4
-                0x0000000020000024                __bss_start__ = .
-                0x0000000020000024                _sbss = .
+.bss            0x0000000020000028        0x4
+                0x0000000020000028                __bss_start__ = .
+                0x0000000020000028                _sbss = .
  *(.bss_begin .bss_begin.*)
  *(.bss .bss.*)
  .bss.name.4262
-                0x0000000020000024        0x1 ./system/src/newlib/_syscalls.o
+                0x0000000020000028        0x1 ./system/src/newlib/_syscalls.o
  *(COMMON)
  *(.bss_end .bss_end.*)
-                0x0000000020000028                . = ALIGN (0x4)
- *fill*         0x0000000020000025        0x3 
-                0x0000000020000028                __bss_end__ = .
-                0x0000000020000028                _ebss = .
+                0x000000002000002c                . = ALIGN (0x4)
+ *fill*         0x0000000020000029        0x3 
+                0x000000002000002c                __bss_end__ = .
+                0x000000002000002c                _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x0000000020000028        0x0
-                0x0000000020000028                _noinit = .
+.noinit         0x000000002000002c        0x0
+                0x000000002000002c                _noinit = .
  *(.noinit .noinit.*)
-                0x0000000020000028                . = ALIGN (0x4)
-                0x0000000020000028                _end_noinit = .
+                0x000000002000002c                . = ALIGN (0x4)
+                0x000000002000002c                _end_noinit = .
                 [!provide]                        PROVIDE (end, _end_noinit)
                 [!provide]                        PROVIDE (_end, _end_noinit)
                 [!provide]                        PROVIDE (__end, _end_noinit)
                 [!provide]                        PROVIDE (__end__, _end_noinit)
 
-._check_stack   0x0000000020000028      0x100
-                0x0000000020000128                . = (. + _Minimum_Stack_Size)
- *fill*         0x0000000020000028      0x100 
+._check_stack   0x000000002000002c      0x100
+                0x000000002000012c                . = (. + _Minimum_Stack_Size)
+ *fill*         0x000000002000002c      0x100 
 
 .b1text
  *(.b1text)
@@ -780,7 +787,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x375b
+.debug_info     0x0000000000000000     0x374e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x967 ./system/src/newlib/_exit.o
  .debug_info    0x0000000000000967      0x3d1 ./system/src/newlib/_startup.o
@@ -790,9 +797,9 @@ END GROUP
  .debug_info    0x0000000000001cd6      0xad2 ./system/src/cortexm/exception_handlers.o
  .debug_info    0x00000000000027a8      0x49f ./system/src/cmsis/system_stm32f10x.o
  .debug_info    0x0000000000002c47       0xcd ./system/src/cmsis/vectors_stm32f10x.o
- .debug_info    0x0000000000002d14      0xa47 ./src/main.o
+ .debug_info    0x0000000000002d14      0xa3a ./src/main.o
 
-.debug_abbrev   0x0000000000000000      0xde8
+.debug_abbrev   0x0000000000000000      0xddb
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x210 ./system/src/newlib/_exit.o
  .debug_abbrev  0x0000000000000210      0x173 ./system/src/newlib/_startup.o
@@ -802,9 +809,9 @@ END GROUP
  .debug_abbrev  0x00000000000007b6      0x1fe ./system/src/cortexm/exception_handlers.o
  .debug_abbrev  0x00000000000009b4      0x18c ./system/src/cmsis/system_stm32f10x.o
  .debug_abbrev  0x0000000000000b40       0x9a ./system/src/cmsis/vectors_stm32f10x.o
- .debug_abbrev  0x0000000000000bda      0x20e ./src/main.o
+ .debug_abbrev  0x0000000000000bda      0x201 ./src/main.o
 
-.debug_line     0x0000000000000000      0xec1
+.debug_line     0x0000000000000000      0xf0c
  *(.debug_line)
  .debug_line    0x0000000000000000      0x1ca ./system/src/newlib/_exit.o
  .debug_line    0x00000000000001ca      0x10d ./system/src/newlib/_startup.o
@@ -814,7 +821,7 @@ END GROUP
  .debug_line    0x00000000000006fc      0x1f0 ./system/src/cortexm/exception_handlers.o
  .debug_line    0x00000000000008ec      0x16b ./system/src/cmsis/system_stm32f10x.o
  .debug_line    0x0000000000000a57       0x58 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_line    0x0000000000000aaf      0x412 ./src/main.o
+ .debug_line    0x0000000000000aaf      0x45d ./src/main.o
 
 .debug_frame    0x0000000000000000      0x3f0
  *(.debug_frame)
@@ -849,13 +856,13 @@ END GROUP
  .debug_str     0x0000000000000b0a      0x1fd ./src/main.o
                                         0x413 (size before relaxing)
 
-.debug_loc      0x0000000000000000      0x90c
+.debug_loc      0x0000000000000000      0x8e2
  *(.debug_loc)
  .debug_loc     0x0000000000000000       0x21 ./system/src/newlib/_exit.o
  .debug_loc     0x0000000000000021      0x148 ./system/src/newlib/_startup.o
  .debug_loc     0x0000000000000169       0x63 ./system/src/newlib/_syscalls.o
  .debug_loc     0x00000000000001cc       0xb1 ./system/src/cmsis/system_stm32f10x.o
- .debug_loc     0x000000000000027d      0x68f ./src/main.o
+ .debug_loc     0x000000000000027d      0x665 ./src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -873,7 +880,7 @@ END GROUP
  *(.debug_varnames)
 OUTPUT(Final_2.1_r.elf elf32-littlearm)
 
-.debug_ranges   0x0000000000000000      0x2a0
+.debug_ranges   0x0000000000000000      0x290
  .debug_ranges  0x0000000000000000       0x18 ./system/src/newlib/_exit.o
  .debug_ranges  0x0000000000000018       0xa0 ./system/src/newlib/_startup.o
  .debug_ranges  0x00000000000000b8       0x20 ./system/src/newlib/_syscalls.o
@@ -882,4 +889,4 @@ OUTPUT(Final_2.1_r.elf elf32-littlearm)
  .debug_ranges  0x0000000000000100       0x70 ./system/src/cortexm/exception_handlers.o
  .debug_ranges  0x0000000000000170       0x30 ./system/src/cmsis/system_stm32f10x.o
  .debug_ranges  0x00000000000001a0       0x10 ./system/src/cmsis/vectors_stm32f10x.o
- .debug_ranges  0x00000000000001b0       0xf0 ./src/main.o
+ .debug_ranges  0x00000000000001b0       0xe0 ./src/main.o
